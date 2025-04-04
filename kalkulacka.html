@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulačka pro výpočet hmotnosti polotovarů</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            text-align: center;
+            color: #003f87;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-container img {
+            max-width: 200px;
+            height: auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+        }
+
+        .image-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #003f87;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background-color: #002f66;
+        }
+
+        .input-type-group {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="logo-container">
+        <img src="images/skodajslogo_image.png" alt="Logo firmy Škoda JS">
+    </div>
+
+    <h1>Kalkulačka pro výpočet hmotnosti polotovarů</h1>
+
+    <div class="form-group">
+        <label for="type">Vyberte typ polotovaru:</label>
+        <select id="type">
+            <option value="rod">Tyč</option>
+            <option value="tube">Trubka</option>
+            <option value="plate">Plech (bude přidán později)</option>
+        </select>
+    </div>
+
+    <div class="image-container" id="image-container">
+        <h2>Obrázek pro typ polotovaru (tyč):</h2>
+        <img src="images/rod_image.png" alt="Obrázek typu polotovaru (tyč)">
+    </div>
+
+    <div class="form-group">
+        <label for="material">Vyberte materiál:</label>
+        <select id="material">
+            <option value="steel">Ocel</option>
+            <option value="stainless_steel">Nerezová ocel</option>
+            <option value="aluminum">Hliník</option>
+            <option value="plastic">Plast (Polyamid)</option>
+        </select>
+    </div>
+
+    <!-- Pro TYČ -->
+    <div class="input-type-group" id="rod-inputs">
+        <div class="form-group">
+            <label for="diameter">Průměr tyče d (mm):</label>
+            <input type="number" id="diameter" placeholder="Například 30">
+        </div>
+        <div class="form-group">
+            <label for="length-rod">Délka tyče (mm):</label>
+            <input type="number" id="length-rod" placeholder="Například 1000">
+        </div>
+    </div>
+
+    <!-- Pro TRUBKU -->
+    <div class="input-type-group" id="tube-inputs">
+        <div class="form-group">
+            <label for="outerDiameter">Vnější průměr D (mm):</label>
+            <input type="number" id="outerDiameter" placeholder="Například 30">
+        </div>
+        <div class="form-group">
+            <label for="wallThickness">Tloušťka stěny t (mm):</label>
+            <input type="number" id="wallThickness" placeholder="Například 2">
+        </div>
+        <div class="form-group">
+            <label for="length-tube">Délka trubky (mm):</label>
+            <input type="number" id="length-tube" placeholder="Například 1000">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <button class="btn" onclick="calculateWeight()">Vypočítat hmotnost</button>
+    </div>
+
+    <div class="result" id="result"></div>
+
+</div>
+
+<script>
+    const densities = {
+        steel: 7850,
+        stainless_steel: 8000,
+        aluminum: 2700,
+        plastic: 1400
+    };
+
+    const typeSelector = document.getElementById('type');
+    const rodInputs = document.getElementById('rod-inputs');
+    const tubeInputs = document.getElementById('tube-inputs');
+    const imageContainer = document.getElementById('image-container');
+
+    function updateInputs() {
+        const type = typeSelector.value;
+
+        rodInputs.style.display = 'none';
+        tubeInputs.style.display = 'none';
+
+        if (type === 'rod') {
+            rodInputs.style.display = 'block';
+            imageContainer.innerHTML = '<h2>Obrázek pro typ polotovaru (tyč):</h2><img src="images/rod_image.png" alt="Obrázek typu polotovaru (tyč)">';
+        } else if (type === 'tube') {
+            tubeInputs.style.display = 'block';
+            imageContainer.innerHTML = '<h2>Obrázek pro typ polotovaru (trubka):</h2><img src="images/tube_image.png" alt="Obrázek typu polotovaru (trubka)">';
+        } else {
+            imageContainer.innerHTML = '<h2>Obrázek pro typ polotovaru bude přidán později.</h2>';
+        }
+    }
+
+    typeSelector.addEventListener('change', updateInputs);
+    window.onload = updateInputs;
+
+    function calculateWeight() {
+        const material = document.getElementById('material').value;
+        const density = densities[material];
+        const type = typeSelector.value;
+        let weight = 0;
+
+        if (type === 'rod') {
+            const d = parseFloat(document.getElementById('diameter').value);
+            const l = parseFloat(document.getElementById('length-rod').value);
+
+            if (isNaN(d) || isNaN(l) || d <= 0 || l <= 0) {
+                alert("Zadejte platné hodnoty pro průměr a délku tyče.");
+                return;
+            }
+
+            const d_m = d / 1000;
+            const l_m = l / 1000;
+            const volume = Math.PI * Math.pow(d_m / 2, 2) * l_m;
+            weight = volume * density;
+
+        } else if (type === 'tube') {
+            const D = parseFloat(document.getElementById('outerDiameter').value);
+            const t = parseFloat(document.getElementById('wallThickness').value);
+            const l = parseFloat(document.getElementById('length-tube').value);
+
+            if (isNaN(D) || isNaN(t) || isNaN(l) || D <= 0 || t <= 0 || l <= 0 || D <= 2 * t) {
+                alert("Zadejte platné hodnoty pro průměr, tloušťku a délku trubky.");
+                return;
+            }
+
+            const D_m = D / 1000;
+            const t_m = t / 1000;
+            const l_m = l / 1000;
+
+            const R_outer = D_m / 2;
+            const R_inner = R_outer - t_m;
+
+            const volume = Math.PI * (Math.pow(R_outer, 2) - Math.pow(R_inner, 2)) * l_m;
+            weight = volume * density;
+        }
+
+        const weightFormatted = weight.toLocaleString('cs-CZ', { maximumFractionDigits: 3 });
+        document.getElementById('result').innerHTML = `Hmotnost: ${weightFormatted} kg`;
+    }
+</script>
+
+</body>
+</html>
