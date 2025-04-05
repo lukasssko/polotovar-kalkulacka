@@ -6,12 +6,22 @@
   <title>Kalkulačka pro polotovary</title>
   <style>
     @font-face {
-      font-family: 'ISOCPEUR';
-      src: url('fonts/isocpeur.ttf') format('truetype');
+      font-family: "ISOCPEUR";
+      src: url("fonts/isocpeur.ttf") format("truetype");
+      font-display: swap;
+    }
+
+    body,
+    input,
+    select,
+    button,
+    label,
+    h1,
+    .result {
+      font-family: "ISOCPEUR", monospace;
     }
 
     body {
-      font-family: 'ISOCPEUR', sans-serif;
       background-color: #f4f4f4;
       margin: 0;
       padding: 0;
@@ -99,110 +109,145 @@
   </style>
 </head>
 <body>
-
   <header>
-    <img src="images/skodajslogo_image.png" alt="Logo společnosti" />
-    <h1>Kalkulačka pro výpočet hmotnosti polotovarů</h1>
+    <img src="logo.png" alt="Logo firmy" />
+    <h1>Kalkulačka pro výpočet hmotnosti polotovaru</h1>
   </header>
 
   <div class="container">
     <div class="form-section">
-      <label for="type">Typ polotovaru:</label>
-      <select id="type">
-        <option value="rod">Tyč</option>
-        <option value="tube">Trubka</option>
-        <option value="sheet">Plech</option>
+      <label for="material">Materiál (hustota v g/cm³):</label>
+      <select id="material">
+        <option value="7.85">Ocel (7.85)</option>
+        <option value="2.70">Hliník (2.70)</option>
+        <option value="8.96">Měď (8.96)</option>
+        <option value="7.13">Mosaz (7.13)</option>
       </select>
     </div>
 
-    <div class="form-section" id="rod-form">
-      <label for="diameter">Průměr tyče d (mm):</label>
-      <input type="number" id="diameter" placeholder="Průměr v mm" />
-      <label for="length">Délka tyče (mm):</label>
-      <input type="number" id="length" placeholder="Délka v mm" />
-      <div class="image-container">
-        <img src="images/rod_image.png" alt="Obrázek tyče" />
-      </div>
+    <div class="form-section">
+      <label for="shape">Tvar polotovaru:</label>
+      <select id="shape" onchange="updateInputs()">
+        <option value="kruh">Válcový prut (kruh)</option>
+        <option value="hranol">Hranol (čtyřhran)</option>
+        <option value="plech">Plech (deska)</option>
+        <option value="trubka">Trubka</option>
+      </select>
     </div>
 
-    <div class="form-section" id="tube-form" style="display: none;">
-      <label for="outer-diameter">Vnější průměr trubky D (mm):</label>
-      <input type="number" id="outer-diameter" placeholder="Vnější průměr v mm" />
-      <label for="wall-thickness">Tloušťka stěny t (mm):</label>
-      <input type="number" id="wall-thickness" placeholder="Tloušťka stěny v mm" />
-      <label for="length-tube">Délka trubky (mm):</label>
-      <input type="number" id="length-tube" placeholder="Délka trubky v mm" />
-      <div class="image-container">
-        <img src="images/tube_image.png" alt="Obrázek trubky" />
-      </div>
-    </div>
-
-    <div class="form-section" id="sheet-form" style="display: none;">
-      <label for="width">Šířka plechu (mm):</label>
-      <input type="number" id="width" placeholder="Šířka plechu v mm" />
-      <label for="height">Výška plechu (mm):</label>
-      <input type="number" id="height" placeholder="Výška plechu v mm" />
-      <label for="thickness">Tloušťka plechu (mm):</label>
-      <input type="number" id="thickness" placeholder="Tloušťka plechu v mm" />
+    <div class="form-section" id="dimensions">
+      <!-- Dynamicky se mění -->
     </div>
 
     <button onclick="calculateWeight()">Vypočítat hmotnost</button>
 
-    <div class="result" id="result">
-      Hmotnost: <span id="weight">0</span> kg
-    </div>
+    <div class="result" id="result"></div>
+
+    <div class="image-container" id="imageContainer"></div>
   </div>
 
   <script>
-    const densities = {
-      rod: 7.85,
-      tube: 7.85,
-      sheet: 7.85
-    };
+    function updateInputs() {
+      const shape = document.getElementById("shape").value;
+      const dimensions = document.getElementById("dimensions");
+      const imageContainer = document.getElementById("imageContainer");
 
-    function calculateWeight() {
-      const type = document.getElementById('type').value;
-      let weight = 0;
+      let html = '';
+      let imgSrc = '';
 
-      if (type === "rod") {
-        const d = parseFloat(document.getElementById('diameter').value);
-        const l = parseFloat(document.getElementById('length').value);
-        if (d && l) {
-          const volume_mm3 = Math.PI * Math.pow(d / 2, 2) * l;
-          const volume_cm3 = volume_mm3 / 1000 / 1000;
-          weight = volume_cm3 * densities.rod;
-        }
-      } else if (type === "tube") {
-        const D = parseFloat(document.getElementById('outer-diameter').value);
-        const t = parseFloat(document.getElementById('wall-thickness').value);
-        const l = parseFloat(document.getElementById('length-tube').value);
-        if (D && t && l) {
-          const d = D - 2 * t;
-          const volume_mm3 = Math.PI * (Math.pow(D / 2, 2) - Math.pow(d / 2, 2)) * l;
-          const volume_cm3 = volume_mm3 / 1000 / 1000;
-          weight = volume_cm3 * densities.tube;
-        }
-      } else if (type === "sheet") {
-        const w = parseFloat(document.getElementById('width').value);
-        const h = parseFloat(document.getElementById('height').value);
-        const t = parseFloat(document.getElementById('thickness').value);
-        if (w && h && t) {
-          const volume_mm3 = w * h * t;
-          const volume_cm3 = volume_mm3 / 1000 / 1000;
-          weight = volume_cm3 * densities.sheet;
-        }
+      switch(shape) {
+        case "kruh":
+          html = `
+            <label for="prumer">Průměr [mm]:</label>
+            <input type="number" id="prumer" step="0.01">
+            <label for="delka">Délka [mm]:</label>
+            <input type="number" id="delka" step="0.01">
+          `;
+          imgSrc = "images/kruh.png";
+          break;
+
+        case "hranol":
+          html = `
+            <label for="sirka">Šířka [mm]:</label>
+            <input type="number" id="sirka" step="0.01">
+            <label for="vyska">Výška [mm]:</label>
+            <input type="number" id="vyska" step="0.01">
+            <label for="delka">Délka [mm]:</label>
+            <input type="number" id="delka" step="0.01">
+          `;
+          imgSrc = "images/hranol.png";
+          break;
+
+        case "plech":
+          html = `
+            <label for="sirka">Šířka [mm]:</label>
+            <input type="number" id="sirka" step="0.01">
+            <label for="delka">Délka [mm]:</label>
+            <input type="number" id="delka" step="0.01">
+            <label for="tloustka">Tloušťka [mm]:</label>
+            <input type="number" id="tloustka" step="0.01">
+          `;
+          imgSrc = "images/plech.png";
+          break;
+
+        case "trubka":
+          html = `
+            <label for="vnejsi">Vnější průměr [mm]:</label>
+            <input type="number" id="vnejsi" step="0.01">
+            <label for="vnitrni">Vnitřní průměr [mm]:</label>
+            <input type="number" id="vnitrni" step="0.01">
+            <label for="delka">Délka [mm]:</label>
+            <input type="number" id="delka" step="0.01">
+          `;
+          imgSrc = "images/trubka.png";
+          break;
       }
 
-      document.getElementById('weight').textContent = weight.toFixed(2);
+      dimensions.innerHTML = html;
+      imageContainer.innerHTML = `<img src="${imgSrc}" alt="Tvar">`;
     }
 
-    document.getElementById('type').addEventListener('change', function () {
-      const type = this.value;
-      document.getElementById('rod-form').style.display = type === 'rod' ? 'block' : 'none';
-      document.getElementById('tube-form').style.display = type === 'tube' ? 'block' : 'none';
-      document.getElementById('sheet-form').style.display = type === 'sheet' ? 'block' : 'none';
-    });
-  </script>
+    function calculateWeight() {
+      const material = parseFloat(document.getElementById("material").value);
+      const shape = document.getElementById("shape").value;
+      let volume = 0;
 
+      if (shape === "kruh") {
+        const prumer = parseFloat(document.getElementById("prumer").value);
+        const delka = parseFloat(document.getElementById("delka").value);
+        volume = Math.PI * Math.pow(prumer / 2, 2) * delka;
+      }
+
+      if (shape === "hranol") {
+        const sirka = parseFloat(document.getElementById("sirka").value);
+        const vyska = parseFloat(document.getElementById("vyska").value);
+        const delka = parseFloat(document.getElementById("delka").value);
+        volume = sirka * vyska * delka;
+      }
+
+      if (shape === "plech") {
+        const sirka = parseFloat(document.getElementById("sirka").value);
+        const delka = parseFloat(document.getElementById("delka").value);
+        const tloustka = parseFloat(document.getElementById("tloustka").value);
+        volume = sirka * delka * tloustka;
+      }
+
+      if (shape === "trubka") {
+        const vnejsi = parseFloat(document.getElementById("vnejsi").value);
+        const vnitrni = parseFloat(document.getElementById("vnitrni").value);
+        const delka = parseFloat(document.getElementById("delka").value);
+        volume = Math.PI * (Math.pow(vnejsi / 2, 2) - Math.pow(vnitrni / 2, 2)) * delka;
+      }
+
+      const volume_cm3 = volume / 1000; // mm³ na cm³
+      const mass = volume_cm3 * material;
+
+      document.getElementById("result").innerText =
+        `Hmotnost: ${mass.toFixed(2)} g`;
+    }
+
+    // Načti výchozí tvar při startu
+    window.onload = updateInputs;
+  </script>
 </body>
 </html>
