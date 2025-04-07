@@ -1,39 +1,133 @@
-function calculateWeight() {
-  const type = document.getElementById('type').value;
-  let weight = 0;
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Výpočet hmotnosti polotovaru</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
 
-  if (type === "rod") {
-    const d = parseFloat(document.getElementById('diameter').value);
-    const l = parseFloat(document.getElementById('length').value);
-    if (d && l) {
-      const radius_m = (d / 1000) / 2; // mm → m
-      const length_m = l / 1000;
-      const volume_m3 = Math.PI * Math.pow(radius_m, 2) * length_m;
-      weight = volume_m3 * 7850; // kg/m³
+    h1 {
+      text-align: center;
     }
-  } else if (type === "tube") {
-    const D = parseFloat(document.getElementById('outer-diameter').value);
-    const t = parseFloat(document.getElementById('wall-thickness').value);
-    const l = parseFloat(document.getElementById('length-tube').value);
-    if (D && t && l) {
-      const outer_radius_m = (D / 1000) / 2;
-      const inner_radius_m = ((D - 2 * t) / 1000) / 2;
-      const length_m = l / 1000;
-      const volume_m3 = Math.PI * (Math.pow(outer_radius_m, 2) - Math.pow(inner_radius_m, 2)) * length_m;
-      weight = volume_m3 * 7850; // kg/m³
-    }
-  } else if (type === "sheet") {
-    const w = parseFloat(document.getElementById('width').value);
-    const h = parseFloat(document.getElementById('height').value);
-    const t = parseFloat(document.getElementById('thickness').value);
-    if (w && h && t) {
-      const width_m = w / 1000;
-      const height_m = h / 1000;
-      const thickness_m = t / 1000;
-      const volume_m3 = width_m * height_m * thickness_m;
-      weight = volume_m3 * 7850; // kg/m³
-    }
-  }
 
-  document.getElementById('weight').textContent = weight.toFixed(2);
-}
+    .form-section {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 1.2em;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Výpočet hmotnosti polotovaru</h1>
+
+  <div class="form-section">
+    <label for="type">Typ polotovaru:</label>
+    <select id="type" onchange="updateForm()">
+      <option value="rod">Plný kruhový prut</option>
+      <option value="tube">Trubka</option>
+      <option value="sheet">Plech</option>
+    </select>
+  </div>
+
+  <div class="form-section">
+    <label for="material">Materiál:</label>
+    <select id="material">
+      <option value="7850">Uhlíková ocel (7850 kg/m³)</option>
+      <option value="8000">Nerezová ocel (8000 kg/m³)</option>
+      <option value="1200">Plast (1200 kg/m³)</option>
+    </select>
+  </div>
+
+  <!-- Prut -->
+  <div id="rod-inputs" class="form-section">
+    <label for="diameter">Průměr (mm):</label>
+    <input type="number" id="diameter">
+    <label for="length">Délka (mm):</label>
+    <input type="number" id="length">
+  </div>
+
+  <!-- Trubka -->
+  <div id="tube-inputs" class="form-section hidden">
+    <label for="outer-diameter">Vnější průměr (mm):</label>
+    <input type="number" id="outer-diameter">
+    <label for="wall-thickness">Síla stěny (mm):</label>
+    <input type="number" id="wall-thickness">
+    <label for="length-tube">Délka (mm):</label>
+    <input type="number" id="length-tube">
+  </div>
+
+  <!-- Plech -->
+  <div id="sheet-inputs" class="form-section hidden">
+    <label for="width">Šířka (mm):</label>
+    <input type="number" id="width">
+    <label for="height">Délka (mm):</label>
+    <input type="number" id="height">
+    <label for="thickness">Tloušťka (mm):</label>
+    <input type="number" id="thickness">
+  </div>
+
+  <div class="form-section">
+    <button onclick="calculateWeight()">Vypočítat hmotnost</button>
+  </div>
+
+  <div id="result">Hmotnost: <span id="weight">0.00</span> kg</div>
+
+  <script>
+    function updateForm() {
+      const type = document.getElementById('type').value;
+      document.getElementById('rod-inputs').classList.add('hidden');
+      document.getElementById('tube-inputs').classList.add('hidden');
+      document.getElementById('sheet-inputs').classList.add('hidden');
+
+      if (type === "rod") {
+        document.getElementById('rod-inputs').classList.remove('hidden');
+      } else if (type === "tube") {
+        document.getElementById('tube-inputs').classList.remove('hidden');
+      } else if (type === "sheet") {
+        document.getElementById('sheet-inputs').classList.remove('hidden');
+      }
+    }
+
+    function calculateWeight() {
+      const type = document.getElementById('type').value;
+      const density = parseFloat(document.getElementById('material').value);
+      let weight = 0;
+
+      if (type === "rod") {
+        const d = parseFloat(document.getElementById('diameter').value);
+        const l = parseFloat(document.getElementById('length').value);
+        if (d && l) {
+          const radius_m = (d / 1000) / 2;
+          const length_m = l / 1000;
+          const volume_m3 = Math.PI * Math.pow(radius_m, 2) * length_m;
+          weight = volume_m3 * density;
+        }
+      } else if (type === "tube") {
+        const D = parseFloat(document.getElementById('outer-diameter').value);
+        const t = parseFloat(document.getElementById('wall-thickness').value);
+        const l =
