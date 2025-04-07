@@ -14,32 +14,33 @@
 
     header {
       display: flex;
-      justify-content: center; /* Vycentrování logo a textu */
+      justify-content: space-between; /* Logo vlevo, nadpis uprostřed */
       align-items: center;
       background-color: white;
-      padding: 20px 40px; /* Větší prostor kolem obsahu */
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Stín pro hlavičku */
+      padding: 20px 40px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     header img {
-      max-width: 150px; /* Zvýšení velikosti loga */
-      margin-right: 20px; /* Mezera mezi logem a názvem */
+      max-width: 150px;
+      margin-right: 20px;
     }
 
     .title-container {
-      text-align: center; /* Vycentrování textu */
+      flex-grow: 1; /* Umožňuje nadpisu být vycentrován */
+      text-align: center;
     }
 
     header h1 {
       font-size: 24px;
-      color: #164183; /* Hlavní barva společnosti */
+      color: #164183;
       margin: 0;
     }
 
     header hr {
       border: none;
       height: 1px;
-      background-color: #164183; /* Hlavní barva pro čáru */
+      background-color: #164183;
       margin-top: 20px;
     }
 
