@@ -21,7 +21,7 @@
     }
 
     header img {
-      max-width: 140px; /* Zvětšení obrázku loga */
+      max-width: 120px; /* Zmenšení obrázku loga */
       margin-bottom: 10px;
     }
 
@@ -31,7 +31,7 @@
     }
 
     .container {
-      max-width: 360px;
+      max-width: 360px; /* Zmenšení maximální šířky */
       margin: 30px auto;
       background-color: white;
       padding: 20px;
@@ -40,14 +40,17 @@
     }
 
     .form-section {
-      margin-bottom: 15px;
+      margin-bottom: 15px; /* Menší mezery pro větší přehlednost */
+      display: flex; /* Používáme flexbox pro horizontální uspořádání */
+      justify-content: space-between; /* Mezi formulářovými prvky a obrázkem */
+      align-items: center; /* Vertikálně zarovnáno na střed */
     }
 
     label {
       font-weight: bold;
       display: block;
       margin: 5px 0;
-      color: #164183;
+      color: #164183; /* Hlavní barva pro text */
     }
 
     input[type="number"],
@@ -62,7 +65,7 @@
 
     button {
       padding: 12px;
-      background-color: #90181c;
+      background-color: #90181c; /* Barva tlačítka pro výpočet */
       color: white;
       border: none;
       cursor: pointer;
@@ -72,7 +75,7 @@
     }
 
     button:hover {
-      background-color: #c4341e;
+      background-color: #c4341e; /* Barva tlačítka pro hover */
     }
 
     .result {
@@ -80,11 +83,11 @@
       font-weight: bold;
       margin-top: 20px;
       text-align: center;
-      color: #164183;
+      color: #164183; /* Hlavní barva pro text */
     }
 
     .copy-button {
-      background-color: #508cbc;
+      background-color: #508cbc; /* Zelená pro tlačítko kopírování */
       margin-top: 10px;
       padding: 10px;
       width: 100%;
@@ -94,19 +97,17 @@
     }
 
     .copy-button:hover {
-      background-color: #9ac1db;
+      background-color: #9ac1db; /* Barva pro hover tlačítka kopírování */
     }
 
     .image-container {
-      text-align: right; /* Posun obrázku na pravou stranu */
-      margin-top: 10px;
+      width: 45%; /* Nastavení šířky pro obrázek, aby byl vedle formuláře */
+      text-align: center;
     }
 
     .image-container img {
-      max-width: 80%;
+      max-width: 100%; /* Obrázek se přizpůsobí šířce kontejneru */
       height: auto;
-      margin: 10px 0;
-      max-height: 200px;
       object-fit: contain;
     }
   </style>
@@ -221,6 +222,7 @@
         }
       }
 
+      // Změna desetinné tečky na čárku
       document.getElementById('weight').textContent = weight.toFixed(2).replace('.', ',');
     }
 
@@ -238,6 +240,7 @@
       document.getElementById('sheet-form').style.display = type === 'sheet' ? 'block' : 'none';
     });
 
+    // Přidání posluchače události pro Enter
     document.addEventListener('keydown', function(event) {
       if (event.key === 'Enter') {
         calculateWeight();
