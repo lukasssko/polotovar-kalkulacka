@@ -21,17 +21,17 @@
     }
 
     header img {
-      max-width: 180px;
+      max-width: 120px; /* Zmenšení obrázku loga */
       margin-bottom: 10px;
     }
 
     header h1 {
       margin: 0;
-      font-size: 22px;
+      font-size: 20px;
     }
 
     .container {
-      max-width: 400px;
+      max-width: 360px; /* Zmenšení maximální šířky */
       margin: 30px auto;
       background-color: white;
       padding: 20px;
@@ -40,7 +40,7 @@
     }
 
     .form-section {
-      margin-bottom: 20px;
+      margin-bottom: 15px; /* Menší mezery pro větší přehlednost */
     }
 
     label {
@@ -87,9 +87,11 @@
     }
 
     .image-container img {
-      max-width: 100%;
+      max-width: 80%; /* Zmenšení velikosti obrázků */
       height: auto;
       margin: 10px 0;
+      max-height: 200px; /* Omezí výšku obrázků */
+      object-fit: contain;
     }
   </style>
 </head>
