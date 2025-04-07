@@ -21,7 +21,7 @@
     }
 
     header img {
-      max-width: 120px;
+      max-width: 120px; /* Zmenšení obrázku loga */
       margin-bottom: 10px;
     }
 
@@ -31,7 +31,7 @@
     }
 
     .container {
-      max-width: 360px;
+      max-width: 360px; /* Zmenšení maximální šířky */
       margin: 30px auto;
       background-color: white;
       padding: 20px;
@@ -40,7 +40,7 @@
     }
 
     .form-section {
-      margin-bottom: 15px;
+      margin-bottom: 15px; /* Menší mezery pro větší přehlednost */
     }
 
     label {
@@ -81,16 +81,30 @@
       text-align: center;
     }
 
+    .copy-button {
+      background-color: #4CAF50; /* Zelená pro tlačítko kopírování */
+      margin-top: 10px;
+      padding: 10px;
+      width: 100%;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .copy-button:hover {
+      background-color: #45a049;
+    }
+
     .image-container {
       text-align: center;
       margin-top: 10px;
     }
 
     .image-container img {
-      max-width: 80%;
+      max-width: 80%; /* Zmenšení velikosti obrázků */
       height: auto;
       margin: 10px 0;
-      max-height: 200px;
+      max-height: 200px; /* Omezí výšku obrázků */
       object-fit: contain;
     }
   </style>
@@ -159,8 +173,7 @@
       Hmotnost: <span id="weight">0</span> kg
     </div>
 
-    <!-- Tlačítko pro kopírování -->
-    <button id="copyButton" onclick="copyWeight()">Kopírovat hmotnost</button>
+    <button class="copy-button" onclick="copyWeight()">Zkopírovat hmotnost</button>
   </div>
 
   <script>
@@ -206,7 +219,15 @@
         }
       }
 
-      document.getElementById('weight').textContent = weight.toFixed(2);
+      // Změna desetinné tečky na čárku
+      document.getElementById('weight').textContent = weight.toFixed(2).replace('.', ',');
+    }
+
+    function copyWeight() {
+      const weight = document.getElementById('weight').textContent;
+      navigator.clipboard.writeText(weight)
+        .then(() => alert("Hmotnost zkopírována: " + weight))
+        .catch(err => alert("Chyba při kopírování: " + err));
     }
 
     document.getElementById('type').addEventListener('change', function () {
@@ -215,18 +236,6 @@
       document.getElementById('tube-form').style.display = type === 'tube' ? 'block' : 'none';
       document.getElementById('sheet-form').style.display = type === 'sheet' ? 'block' : 'none';
     });
-
-    // Funkce pro kopírování hmotnosti
-    function copyWeight() {
-      const weight = document.getElementById('weight').textContent;
-      const tempInput = document.createElement('input');
-      tempInput.value = weight;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      document.execCommand('copy');
-      document.body.removeChild(tempInput);
-      alert("Hmotnost zkopírována: " + weight);
-    }
 
     // Přidání posluchače události pro Enter
     document.addEventListener('keydown', function(event) {
