@@ -41,9 +41,6 @@
 
     .form-section {
       margin-bottom: 15px; /* Menší mezery pro větší přehlednost */
-      display: flex; /* Používáme flexbox pro horizontální uspořádání */
-      justify-content: space-between; /* Mezi formulářovými prvky a obrázkem */
-      align-items: center; /* Vertikálně zarovnáno na střed */
     }
 
     label {
@@ -101,13 +98,15 @@
     }
 
     .image-container {
-      width: 45%; /* Nastavení šířky pro obrázek, aby byl vedle formuláře */
       text-align: center;
+      margin-top: 10px;
     }
 
     .image-container img {
-      max-width: 100%; /* Obrázek se přizpůsobí šířce kontejneru */
+      max-width: 80%; /* Zmenšení velikosti obrázků */
       height: auto;
+      margin: 10px 0;
+      max-height: 200px; /* Omezí výšku obrázků */
       object-fit: contain;
     }
   </style>
