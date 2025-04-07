@@ -110,6 +110,16 @@
       </select>
     </div>
 
+    <div class="form-section">
+      <label for="material">Materiál:</label>
+      <select id="material">
+        <option value="7850">Uhlíková ocel (7850 kg/m³)</option>
+        <option value="8000">Nerezová ocel (8000 kg/m³)</option>
+        <option value="2700">Hliník (2700 kg/m³)</option>
+        <option value="1200">Plast (1200 kg/m³)</option>
+      </select>
+    </div>
+
     <div class="form-section" id="rod-form">
       <label for="diameter">Průměr tyče d (mm):</label>
       <input type="number" id="diameter" placeholder="Průměr v mm" />
@@ -150,9 +160,10 @@
 
   <script>
     const densities = {
-      rod: 7850,
-      tube: 7850,
-      sheet: 7850
+      7850: "Uhlíková ocel",
+      8000: "Nerezová ocel",
+      2700: "Hliník",
+      1200: "Plast"
     };
 
     function mmToMeters(mm) {
@@ -161,6 +172,7 @@
 
     function calculateWeight() {
       const type = document.getElementById('type').value;
+      const density = parseFloat(document.getElementById('material').value);
       let weight = 0;
 
       if (type === "rod") {
@@ -168,7 +180,7 @@
         const l = mmToMeters(parseFloat(document.getElementById('length').value));
         if (d && l) {
           const volume_m3 = Math.PI * Math.pow(d / 2, 2) * l;
-          weight = volume_m3 * densities.rod;
+          weight = volume_m3 * density;
         }
       } else if (type === "tube") {
         const D = mmToMeters(parseFloat(document.getElementById('outer-diameter').value));
@@ -177,7 +189,7 @@
         if (D && t && l) {
           const d = D - 2 * t;
           const volume_m3 = Math.PI * (Math.pow(D / 2, 2) - Math.pow(d / 2, 2)) * l;
-          weight = volume_m3 * densities.tube;
+          weight = volume_m3 * density;
         }
       } else if (type === "sheet") {
         const w = mmToMeters(parseFloat(document.getElementById('width').value));
@@ -185,7 +197,7 @@
         const t = mmToMeters(parseFloat(document.getElementById('thickness').value));
         if (w && h && t) {
           const volume_m3 = w * h * t;
-          weight = volume_m3 * densities.sheet;
+          weight = volume_m3 * density;
         }
       }
 
