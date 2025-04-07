@@ -97,7 +97,7 @@
     }
 
     .copy-button {
-      background-color: #508cbc;
+      background-color: #90181c; /* Červená barva pro tlačítko */
       margin-top: 10px;
       padding: 10px;
       width: 100%;
@@ -107,7 +107,7 @@
     }
 
     .copy-button:hover {
-      background-color: #9ac1db;
+      background-color: #c4341e; /* Tmavší červená při najetí */
     }
 
     .image-container {
@@ -252,10 +252,11 @@
       document.getElementById('sheet-form').style.display = type === 'sheet' ? 'block' : 'none';
     });
 
-    // Přidání posluchačů pro všechny vstupy
-    const inputs = document.querySelectorAll('input');
-    inputs.forEach(input => {
-      input.addEventListener('input', calculateWeight);
+    // Přidání posluchače události pro Enter
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        calculateWeight();
+      }
     });
   </script>
 
