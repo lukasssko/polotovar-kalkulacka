@@ -14,34 +14,24 @@
 
     header {
       background-color: white;
-      padding: 30px 20px;
+      padding: 20px 10px;
       text-align: center;
       color: #164183; /* Hlavní barva společnosti */
       border-bottom: 4px solid #164183; /* Hlavní barva společnosti */
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Mírný stín pro lepší efekt */
     }
 
     header img {
-      max-width: 200px; /* Zvětšení loga */
-      margin-bottom: 20px; /* Větší mezera mezi logem a nadpisem */
+      max-width: 140px; /* Zvětšení obrázku loga */
+      margin-bottom: 10px;
     }
 
     header h1 {
       margin: 0;
-      font-size: 28px;
-      font-weight: bold;
-      letter-spacing: 1px; /* Pro lepší vizuální efekt */
-      color: #164183; /* Hlavní barva pro nadpis */
-    }
-
-    header p {
-      margin: 10px 0 0;
-      font-size: 16px;
-      color: #508cbc; /* Zjemněná barva pro popis */
+      font-size: 20px;
     }
 
     .container {
-      max-width: 360px; /* Zmenšení maximální šířky */
+      max-width: 360px;
       margin: 30px auto;
       background-color: white;
       padding: 20px;
@@ -50,14 +40,14 @@
     }
 
     .form-section {
-      margin-bottom: 15px; /* Menší mezery pro větší přehlednost */
+      margin-bottom: 15px;
     }
 
     label {
       font-weight: bold;
       display: block;
       margin: 5px 0;
-      color: #164183; /* Hlavní barva pro text */
+      color: #164183;
     }
 
     input[type="number"],
@@ -72,7 +62,7 @@
 
     button {
       padding: 12px;
-      background-color: #90181c; /* Barva tlačítka pro výpočet */
+      background-color: #90181c;
       color: white;
       border: none;
       cursor: pointer;
@@ -82,7 +72,7 @@
     }
 
     button:hover {
-      background-color: #c4341e; /* Barva tlačítka pro hover */
+      background-color: #c4341e;
     }
 
     .result {
@@ -90,11 +80,11 @@
       font-weight: bold;
       margin-top: 20px;
       text-align: center;
-      color: #164183; /* Hlavní barva pro text */
+      color: #164183;
     }
 
     .copy-button {
-      background-color: #508cbc; /* Zelená pro tlačítko kopírování */
+      background-color: #508cbc;
       margin-top: 10px;
       padding: 10px;
       width: 100%;
@@ -104,19 +94,19 @@
     }
 
     .copy-button:hover {
-      background-color: #9ac1db; /* Barva pro hover tlačítka kopírování */
+      background-color: #9ac1db;
     }
 
     .image-container {
-      text-align: center;
+      text-align: right; /* Posun obrázku na pravou stranu */
       margin-top: 10px;
     }
 
     .image-container img {
-      max-width: 80%; /* Zmenšení velikosti obrázků */
+      max-width: 80%;
       height: auto;
       margin: 10px 0;
-      max-height: 200px; /* Omezí výšku obrázků */
+      max-height: 200px;
       object-fit: contain;
     }
   </style>
@@ -125,8 +115,7 @@
 
   <header>
     <img src="images/skodajslogo_image.png" alt="Logo společnosti" />
-    <h1>Kalkulátor hmotnosti polotovarů</h1>
-    <p>Pomocí tohoto nástroje můžete jednoduše vypočítat hmotnost různých typů polotovarů na základě jejich rozměrů a materiálu.</p>
+    <h1>Kalkulačka pro výpočet hmotnosti polotovarů</h1>
   </header>
 
   <div class="container">
@@ -232,13 +221,14 @@
         }
       }
 
-      // Změna desetinné tečky na čárku
       document.getElementById('weight').textContent = weight.toFixed(2).replace('.', ',');
     }
 
     function copyWeight() {
       const weight = document.getElementById('weight').textContent;
-      navigator.clipboard.writeText(weight);
+      navigator.clipboard.writeText(weight)
+        .then(() => alert("Hmotnost zkopírována: " + weight))
+        .catch(err => alert("Chyba při kopírování: " + err));
     }
 
     document.getElementById('type').addEventListener('change', function () {
@@ -247,6 +237,13 @@
       document.getElementById('tube-form').style.display = type === 'tube' ? 'block' : 'none';
       document.getElementById('sheet-form').style.display = type === 'sheet' ? 'block' : 'none';
     });
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        calculateWeight();
+      }
+    });
   </script>
+
 </body>
 </html>
