@@ -17,29 +17,33 @@
       justify-content: flex-start; /* Logo vlevo */
       align-items: center;
       background-color: white;
-      padding: 20px 40px; /* Větší prostor kolem obsahu */
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Stín pro hlavičku */
+      padding: 20px 40px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: relative;
     }
 
     header img {
-      max-width: 150px; /* Zvýšení velikosti loga */
+      max-width: 150px;
+      margin-right: 20px;
     }
 
     .title-container {
-      flex-grow: 1; /* Pro zarovnání názvu na střed */
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
       text-align: center;
     }
 
     header h1 {
       font-size: 24px;
-      color: #164183; /* Hlavní barva společnosti */
+      color: #164183;
       margin: 0;
     }
 
     header hr {
       border: none;
       height: 1px;
-      background-color: #164183; /* Hlavní barva pro čáru */
+      background-color: #164183;
       margin-top: 20px;
     }
 
@@ -97,7 +101,7 @@
     }
 
     .copy-button {
-      background-color: #90181c; /* Červená barva pro tlačítko */
+      background-color: #508cbc;
       margin-top: 10px;
       padding: 10px;
       width: 100%;
@@ -107,7 +111,7 @@
     }
 
     .copy-button:hover {
-      background-color: #c4341e; /* Tmavší červená při najetí */
+      background-color: #9ac1db;
     }
 
     .image-container {
@@ -183,6 +187,8 @@
       <label for="thickness">Tloušťka plechu (mm):</label>
       <input type="number" id="thickness" placeholder="Tloušťka plechu v mm" />
     </div>
+
+    <button onclick="calculateWeight()">Vypočítat hmotnost</button>
 
     <div class="result" id="result">
       Hmotnost: <span id="weight">0</span> kg
