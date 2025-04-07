@@ -109,6 +109,26 @@
     #custom-density-container {
       display: none;
     }
+
+    .additional-info {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #e9ecef;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: normal;
+      text-align: left;
+    }
+
+    .additional-info h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .additional-info p {
+      margin: 5px 0;
+    }
+
   </style>
 </head>
 <body>
@@ -181,6 +201,11 @@
       Hmotnost: <span id="weight">0</span> kg
     </div>
 
+    <div class="additional-info">
+      <h2>Výpočet plochy:</h2>
+      <p id="area"></p>
+    </div>
+
     <button class="copy-button" onclick="copyWeight()">Zkopírovat hmotnost</button>
   </div>
 
@@ -204,6 +229,7 @@
         : parseFloat(densityInput);
 
       let weight = 0;
+      let area = 0;
 
       if (type === "rod") {
         const d = mmToMeters(parseFloat(document.getElementById('diameter').value));
@@ -211,6 +237,7 @@
         if (d && l && density) {
           const volume_m3 = Math.PI * Math.pow(d / 2, 2) * l;
           weight = volume_m3 * density;
+          area = Math.PI * Math.pow(d / 2, 2);  // Plocha průřezu tyče
         }
       } else if (type === "tube") {
         const D = mmToMeters(parseFloat(document.getElementById('outer-diameter').value));
@@ -220,6 +247,7 @@
           const d = D - 2 * t;
           const volume_m3 = Math.PI * (Math.pow(D / 2, 2) - Math.pow(d / 2, 2)) * l;
           weight = volume_m3 * density;
+          area = Math.PI * (Math.pow(D / 2, 2) - Math.pow(d / 2, 2));  // Plocha průřezu trubky
         }
       } else if (type === "sheet") {
         const w = mmToMeters(parseFloat(document.getElementById('width').value));
@@ -228,10 +256,12 @@
         if (w && h && t && density) {
           const volume_m3 = w * h * t;
           weight = volume_m3 * density;
+          area = w * h;  // Plocha plechu
         }
       }
 
       document.getElementById('weight').textContent = weight.toFixed(2).replace('.', ',');
+      document.getElementById('area').textContent = `Plocha: ${area.toFixed(2).replace('.', ',')} m²`;
     }
 
     function copyWeight() {
@@ -260,7 +290,6 @@
       calculateWeight();
     });
 
-    // Posluchač Enter
     document.addEventListener('keydown', function(event) {
       if (event.key === 'Enter') {
         event.preventDefault();
@@ -268,13 +297,11 @@
       }
     });
 
-    // Automatický výpočet při změně hodnot
     const inputs = document.querySelectorAll('input, select');
     inputs.forEach(input => {
       input.addEventListener('input', calculateWeight);
     });
 
-    // Inicializace výpočtu při načtení
     window.onload = calculateWeight;
   </script>
 
