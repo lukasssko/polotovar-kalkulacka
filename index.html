@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -151,41 +150,42 @@
 
   <script>
     const densities = {
-      rod: 7.85,
-      tube: 7.85,
-      sheet: 7.85
+      rod: 7850,
+      tube: 7850,
+      sheet: 7850
     };
+
+    function mmToMeters(mm) {
+      return mm / 1000;
+    }
 
     function calculateWeight() {
       const type = document.getElementById('type').value;
       let weight = 0;
 
       if (type === "rod") {
-        const d = parseFloat(document.getElementById('diameter').value);
-        const l = parseFloat(document.getElementById('length').value);
+        const d = mmToMeters(parseFloat(document.getElementById('diameter').value));
+        const l = mmToMeters(parseFloat(document.getElementById('length').value));
         if (d && l) {
-          const volume_mm3 = Math.PI * Math.pow(d / 2, 2) * l;
-          const volume_cm3 = volume_mm3 / 1000 / 1000;
-          weight = volume_cm3 * densities.rod;
+          const volume_m3 = Math.PI * Math.pow(d / 2, 2) * l;
+          weight = volume_m3 * densities.rod;
         }
       } else if (type === "tube") {
-        const D = parseFloat(document.getElementById('outer-diameter').value);
-        const t = parseFloat(document.getElementById('wall-thickness').value);
-        const l = parseFloat(document.getElementById('length-tube').value);
+        const D = mmToMeters(parseFloat(document.getElementById('outer-diameter').value));
+        const t = mmToMeters(parseFloat(document.getElementById('wall-thickness').value));
+        const l = mmToMeters(parseFloat(document.getElementById('length-tube').value));
         if (D && t && l) {
           const d = D - 2 * t;
-          const volume_mm3 = Math.PI * (Math.pow(D / 2, 2) - Math.pow(d / 2, 2)) * l;
-          const volume_cm3 = volume_mm3 / 1000 / 1000;
-          weight = volume_cm3 * densities.tube;
+          const volume_m3 = Math.PI * (Math.pow(D / 2, 2) - Math.pow(d / 2, 2)) * l;
+          weight = volume_m3 * densities.tube;
         }
       } else if (type === "sheet") {
-        const w = parseFloat(document.getElementById('width').value);
-        const h = parseFloat(document.getElementById('height').value);
-        const t = parseFloat(document.getElementById('thickness').value);
+        const w = mmToMeters(parseFloat(document.getElementById('width').value));
+        const h = mmToMeters(parseFloat(document.getElementById('height').value));
+        const t = mmToMeters(parseFloat(document.getElementById('thickness').value));
         if (w && h && t) {
-          const volume_mm3 = w * h * t;
-          const volume_cm3 = volume_mm3 / 1000 / 1000;
-          weight = volume_cm3 * densities.sheet;
+          const volume_m3 = w * h * t;
+          weight = volume_m3 * densities.sheet;
         }
       }
 
