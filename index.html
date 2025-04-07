@@ -14,7 +14,7 @@
 
     header {
       display: flex;
-      justify-content: flex-start; /* Logo vlevo */
+      justify-content: flex-start;
       align-items: center;
       background-color: white;
       padding: 20px 40px;
@@ -38,13 +38,6 @@
       font-size: 24px;
       color: #164183;
       margin: 0;
-    }
-
-    header hr {
-      border: none;
-      height: 1px;
-      background-color: #164183;
-      margin-top: 20px;
     }
 
     .container {
@@ -205,16 +198,17 @@
 
     function calculateWeight() {
       const type = document.getElementById('type').value;
-      let density = parseFloat(document.getElementById('material').value);
-      if (density === 'custom') {
-        density = parseFloat(document.getElementById('custom-density').value);
-      }
+      let densityInput = document.getElementById('material').value;
+      let density = densityInput === 'custom'
+        ? parseFloat(document.getElementById('custom-density').value)
+        : parseFloat(densityInput);
+
       let weight = 0;
 
       if (type === "rod") {
         const d = mmToMeters(parseFloat(document.getElementById('diameter').value));
         const l = mmToMeters(parseFloat(document.getElementById('length').value));
-        if (d && l) {
+        if (d && l && density) {
           const volume_m3 = Math.PI * Math.pow(d / 2, 2) * l;
           weight = volume_m3 * density;
         }
@@ -222,7 +216,7 @@
         const D = mmToMeters(parseFloat(document.getElementById('outer-diameter').value));
         const t = mmToMeters(parseFloat(document.getElementById('wall-thickness').value));
         const l = mmToMeters(parseFloat(document.getElementById('length-tube').value));
-        if (D && t && l) {
+        if (D && t && l && density) {
           const d = D - 2 * t;
           const volume_m3 = Math.PI * (Math.pow(D / 2, 2) - Math.pow(d / 2, 2)) * l;
           weight = volume_m3 * density;
@@ -231,7 +225,7 @@
         const w = mmToMeters(parseFloat(document.getElementById('width').value));
         const h = mmToMeters(parseFloat(document.getElementById('height').value));
         const t = mmToMeters(parseFloat(document.getElementById('thickness').value));
-        if (w && h && t) {
+        if (w && h && t && density) {
           const volume_m3 = w * h * t;
           weight = volume_m3 * density;
         }
@@ -252,6 +246,7 @@
       document.getElementById('rod-form').style.display = type === 'rod' ? 'block' : 'none';
       document.getElementById('tube-form').style.display = type === 'tube' ? 'block' : 'none';
       document.getElementById('sheet-form').style.display = type === 'sheet' ? 'block' : 'none';
+      calculateWeight();
     });
 
     document.getElementById('material').addEventListener('change', function () {
@@ -262,20 +257,25 @@
       } else {
         customDensityContainer.style.display = 'none';
       }
+      calculateWeight();
     });
 
-    // Přidání posluchače události pro Enter
+    // Posluchač Enter
     document.addEventListener('keydown', function(event) {
       if (event.key === 'Enter') {
+        event.preventDefault();
         calculateWeight();
       }
     });
 
-    // Zajištění automatického výpočtu při změně hodnot
-    const inputs = document.querySelectorAll('input');
+    // Automatický výpočet při změně hodnot
+    const inputs = document.querySelectorAll('input, select');
     inputs.forEach(input => {
       input.addEventListener('input', calculateWeight);
     });
+
+    // Inicializace výpočtu při načtení
+    window.onload = calculateWeight;
   </script>
 
 </body>
