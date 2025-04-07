@@ -14,20 +14,30 @@
 
     header {
       background-color: white;
-      padding: 20px 10px;
+      padding: 30px 20px;
       text-align: center;
       color: #164183; /* Hlavní barva společnosti */
       border-bottom: 4px solid #164183; /* Hlavní barva společnosti */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Mírný stín pro lepší efekt */
     }
 
     header img {
-      max-width: 120px; /* Zmenšení obrázku loga */
-      margin-bottom: 10px;
+      max-width: 200px; /* Zvětšení loga */
+      margin-bottom: 20px; /* Větší mezera mezi logem a nadpisem */
     }
 
     header h1 {
       margin: 0;
-      font-size: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      letter-spacing: 1px; /* Pro lepší vizuální efekt */
+      color: #164183; /* Hlavní barva pro nadpis */
+    }
+
+    header p {
+      margin: 10px 0 0;
+      font-size: 16px;
+      color: #508cbc; /* Zjemněná barva pro popis */
     }
 
     .container {
@@ -115,7 +125,8 @@
 
   <header>
     <img src="images/skodajslogo_image.png" alt="Logo společnosti" />
-    <h1>Kalkulačka pro výpočet hmotnosti polotovarů</h1>
+    <h1>Kalkulátor hmotnosti polotovarů</h1>
+    <p>Pomocí tohoto nástroje můžete jednoduše vypočítat hmotnost různých typů polotovarů na základě jejich rozměrů a materiálu.</p>
   </header>
 
   <div class="container">
@@ -227,9 +238,7 @@
 
     function copyWeight() {
       const weight = document.getElementById('weight').textContent;
-      navigator.clipboard.writeText(weight)
-        .then(() => alert("Hmotnost zkopírována: " + weight))
-        .catch(err => alert("Chyba při kopírování: " + err));
+      navigator.clipboard.writeText(weight);
     }
 
     document.getElementById('type').addEventListener('change', function () {
@@ -238,14 +247,6 @@
       document.getElementById('tube-form').style.display = type === 'tube' ? 'block' : 'none';
       document.getElementById('sheet-form').style.display = type === 'sheet' ? 'block' : 'none';
     });
-
-    // Přidání posluchače události pro Enter
-    document.addEventListener('keydown', function(event) {
-      if (event.key === 'Enter') {
-        calculateWeight();
-      }
-    });
   </script>
-
 </body>
 </html>
