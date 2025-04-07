@@ -17,33 +17,29 @@
       justify-content: flex-start; /* Logo vlevo */
       align-items: center;
       background-color: white;
-      padding: 20px 40px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      position: relative;
+      padding: 20px 40px; /* Větší prostor kolem obsahu */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Stín pro hlavičku */
     }
 
     header img {
-      max-width: 150px;
-      margin-right: 20px;
+      max-width: 150px; /* Zvýšení velikosti loga */
     }
 
     .title-container {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
+      flex-grow: 1; /* Pro zarovnání názvu na střed */
       text-align: center;
     }
 
     header h1 {
       font-size: 24px;
-      color: #164183;
+      color: #164183; /* Hlavní barva společnosti */
       margin: 0;
     }
 
     header hr {
       border: none;
       height: 1px;
-      background-color: #164183;
+      background-color: #164183; /* Hlavní barva pro čáru */
       margin-top: 20px;
     }
 
@@ -188,8 +184,6 @@
       <input type="number" id="thickness" placeholder="Tloušťka plechu v mm" />
     </div>
 
-    <button onclick="calculateWeight()">Vypočítat hmotnost</button>
-
     <div class="result" id="result">
       Hmotnost: <span id="weight">0</span> kg
     </div>
@@ -258,11 +252,10 @@
       document.getElementById('sheet-form').style.display = type === 'sheet' ? 'block' : 'none';
     });
 
-    // Přidání posluchače události pro Enter
-    document.addEventListener('keydown', function(event) {
-      if (event.key === 'Enter') {
-        calculateWeight();
-      }
+    // Přidání posluchačů pro všechny vstupy
+    const inputs = document.querySelectorAll('input');
+    inputs.forEach(input => {
+      input.addEventListener('input', calculateWeight);
     });
   </script>
 
