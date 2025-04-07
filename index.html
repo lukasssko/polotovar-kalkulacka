@@ -17,17 +17,24 @@
       padding: 20px 10px;
       text-align: center;
       color: #164183; /* Hlavní barva společnosti */
-      border-bottom: 4px solid #164183; /* Hlavní barva společnosti */
     }
 
     header img {
-      max-width: 120px; /* Zmenšení obrázku loga */
+      max-width: 150px; /* Zvýšení velikosti loga */
       margin-bottom: 10px;
     }
 
     header h1 {
       margin: 0;
       font-size: 20px;
+      padding-top: 20px; /* Trochu prostoru nad názvem */
+    }
+
+    header hr {
+      border: none;
+      height: 1px;
+      background-color: #164183; /* Hlavní barva pro čáru */
+      margin: 10px 0; /* Mezera mezi logem a názvem */
     }
 
     .container {
@@ -115,6 +122,7 @@
 
   <header>
     <img src="images/skodajslogo_image.png" alt="Logo společnosti" />
+    <hr />
     <h1>Kalkulačka pro výpočet hmotnosti polotovarů</h1>
   </header>
 
