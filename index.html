@@ -14,7 +14,7 @@
 
     header {
       display: flex;
-      justify-content: space-between; /* Vlevo logo, vpravo název */
+      justify-content: flex-start; /* Logo vlevo */
       align-items: center;
       background-color: white;
       padding: 20px 40px; /* Větší prostor kolem obsahu */
@@ -22,7 +22,12 @@
     }
 
     header img {
-      max-width: 120px; /* Zmenšení velikosti loga */
+      max-width: 150px; /* Zvýšení velikosti loga */
+    }
+
+    .title-container {
+      flex-grow: 1; /* Pro zarovnání názvu na střed */
+      text-align: center;
     }
 
     header h1 {
@@ -123,7 +128,9 @@
 
   <header>
     <img src="images/skodajslogo_image.svg" alt="Logo společnosti" />
-    <h1>Kalkulačka pro výpočet hmotnosti polotovarů</h1>
+    <div class="title-container">
+      <h1>Kalkulačka pro výpočet hmotnosti polotovarů</h1>
+    </div>
   </header>
 
   <div class="container">
