@@ -14,11 +14,12 @@
 
     header {
       display: flex;
-      justify-content: space-between; /* Logo vlevo, nadpis uprostřed */
+      justify-content: flex-start; /* Logo vlevo */
       align-items: center;
       background-color: white;
       padding: 20px 40px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: relative;
     }
 
     header img {
@@ -27,7 +28,9 @@
     }
 
     .title-container {
-      flex-grow: 1; /* Umožňuje nadpisu být vycentrován */
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
       text-align: center;
     }
 
