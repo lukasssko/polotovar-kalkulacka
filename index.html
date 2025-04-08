@@ -193,6 +193,12 @@
     </div>
 
     <button class="copy-button" onclick="copyWeight()">Zkopírovat hmotnost</button>
+
+    <button class="copy-button" onclick="showOtherWeights()">Zobrazit hmotnost pro jiné materiály</button>
+
+    <div class="result" id="other-weights" style="margin-top: 20px;"></div>
+
+    
   </div>
 
   <script>
@@ -284,6 +290,21 @@
     });
 
     window.onload = calculateWeight;
+
+    function showOtherWeights() {
+    const selected = document.getElementById('material').value;
+    const container = document.getElementById('other-weights');
+    let html = '';
+
+    for (const [density, name] of Object.entries(densities)) {
+      if (density !== selected) {
+        const weight = calculateWeight(parseFloat(density));
+        html += `<div>${name}: ${weight.toFixed(2).replace('.', ',')} kg</div>`;
+      }
+    }
+
+    container.innerHTML = html;
+  }
   </script>
 
 </body>
