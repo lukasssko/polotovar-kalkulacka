@@ -23,6 +23,13 @@
       background-color: #e5ffe5;
     }
 
+    .warning {
+      color: #90181c;
+      font-size: 13px;
+      margin-top: 5px;
+      display: none;
+    }
+
     header {
       display: flex;
       justify-content: flex-start;
@@ -502,6 +509,58 @@
         input.classList.add('valid');
       }
     });
+
+    // Speciální kontrola pro trubku
+    if (visibleForm === 'tube-form') {
+      const type = document.getElementById('tube-input-type').value;
+      const warning = document.getElementById('tube-warning');
+      warning.style.display = 'none';
+
+      if (type === 'outer-thickness') {
+        const D = parseFloat(document.getElementById('outer-diameter').value);
+        const t = parseFloat(document.getElementById('wall-thickness').value);
+        if (!isNaN(D) && !isNaN(t) && 2 * t >= D) {
+          warning.textContent = '⚠️ Tloušťka stěny je příliš velká (2×t ≥ D)';
+          warning.style.display = 'block';
+        }
+      }
+
+      if (type === 'outer-inner') {
+        const D = parseFloat(document.getElementById('outer-diameter-2').value);
+        const d = parseFloat(document.getElementById('inner-diameter').value);
+        if (!isNaN(D) && !isNaN(d) && d >= D) {
+          warning.textContent = '⚠️ Vnitřní průměr je větší nebo roven vnějšímu';
+          warning.style.display = 'block';
+        }
+      }
+    }
+  }
+
+  document.querySelectorAll('input').forEach(input => {
+    input.addEventListener('input', validateInputs);
+    input.addEventListener('blur', validateInputs);
+  });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('input').forEach(input => {
+      input.classList.remove('valid');
+    });
+  });
+
+  function resetInputs() {
+    const formId = ['rod-form', 'tube-form', 'sheet-form'].find(id => {
+      return document.getElementById(id) && document.getElementById(id).style.display === 'block';
+    });
+    if (!formId) return;
+
+    const inputs = document.querySelectorAll(`#${formId} input`);
+    inputs.forEach(input => {
+      input.value = '';
+      input.classList.remove('valid');
+    });
+
+    const warning = document.getElementById('tube-warning');
+    if (warning) warning.style.display = 'none';
   }
 
     document.querySelectorAll('input').forEach(input => {
