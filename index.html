@@ -12,6 +12,19 @@
       padding: 0;
     }
 
+    .input-error {
+      border: 2px solid red !important;
+      background-color: #ffe5e5;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 12px;
+      display: none;
+      margin-top: -5px;
+      margin-bottom: 10px;
+    }
+
     header {
       display: flex;
       justify-content: flex-start;
@@ -461,6 +474,39 @@
       document.getElementById('custom-density').value = '';
       calculateWeight();
     }
+
+    function validateInputs() {
+    const visibleForm = ['rod-form', 'tube-form', 'sheet-form'].find(id => {
+      return document.getElementById(id).style.display === 'block';
+    });
+
+    if (!visibleForm) return;
+
+    const inputs = document.querySelectorAll(`#${visibleForm} input`);
+    inputs.forEach(input => {
+      const errorSpan = input.nextElementSibling;
+      if (input.value.trim() === '' || isNaN(parseFloat(input.value))) {
+        input.classList.add('input-error');
+        if (errorSpan && errorSpan.classList.contains('error-message')) {
+          errorSpan.style.display = 'block';
+        }
+      } else {
+        input.classList.remove('input-error');
+        if (errorSpan && errorSpan.classList.contains('error-message')) {
+          errorSpan.style.display = 'none';
+        }
+      }
+    });
+  }
+
+    document.querySelectorAll('input').forEach(input => {
+    const error = document.createElement('div');
+    error.classList.add('error-message');
+    error.textContent = 'Vyplňte platnou hodnotu';
+    input.insertAdjacentElement('afterend', error);
+    input.addEventListener('blur', validateInputs);
+    input.addEventListener('input', validateInputs);
+  });
 
   </script>
 </body>
