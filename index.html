@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -115,21 +114,29 @@
     }
 
     .toggle-alternatives {
-      background: none;
+      background-color: #164183;
       border: none;
-      color: #164183;
-      text-decoration: underline;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 6px;
       cursor: pointer;
       font-size: 14px;
-      margin-top: 10px;
+      margin: 20px auto 0;
+      display: block;
+      transition: background-color 0.3s;
+    }
+
+    .toggle-alternatives:hover {
+      background-color: #0f2c5c;
     }
 
     .alternative-weights {
       display: none;
       font-size: 14px;
       margin-top: 10px;
-      background: #f9f9f9;
+      background: #eef3fb;
       padding: 10px;
+      border-left: 4px solid #164183;
       border-radius: 6px;
     }
 
@@ -246,17 +253,20 @@
       if (type === "rod") {
         const d = mmToMeters(parseFloat(document.getElementById('diameter').value));
         const l = mmToMeters(parseFloat(document.getElementById('length').value));
+        if (isNaN(d) || isNaN(l)) return 0;
         return Math.PI * Math.pow(d / 2, 2) * l;
       } else if (type === "tube") {
         const D = mmToMeters(parseFloat(document.getElementById('outer-diameter').value));
         const t = mmToMeters(parseFloat(document.getElementById('wall-thickness').value));
         const l = mmToMeters(parseFloat(document.getElementById('length-tube').value));
+        if (isNaN(D) || isNaN(t) || isNaN(l)) return 0;
         const d = D - 2 * t;
         return Math.PI * (Math.pow(D / 2, 2) - Math.pow(d / 2, 2)) * l;
       } else if (type === "sheet") {
         const b = mmToMeters(parseFloat(document.getElementById('width').value));
         const t = mmToMeters(parseFloat(document.getElementById('thickness').value));
         const l = mmToMeters(parseFloat(document.getElementById('height').value));
+        if (isNaN(b) || isNaN(t) || isNaN(l)) return 0;
         return b * t * l;
       }
       return 0;
@@ -266,13 +276,17 @@
       const volume = getVolume();
       let densityInput = document.getElementById('material').value;
       let density = densityInput === 'custom' ? parseFloat(document.getElementById('custom-density').value) : parseFloat(densityInput);
-      const weight = volume * density;
-      document.getElementById('weight').textContent = weight.toFixed(2).replace('.', ',');
+      const weight = isNaN(volume) || isNaN(density) || volume === 0 ? 0 : volume * density;
+      document.getElementById('weight').textContent = weight > 0 ? weight.toFixed(2).replace('.', ',') : '0,00';
       updateAlternativeWeights(volume);
     }
 
     function updateAlternativeWeights(volume) {
       const container = document.getElementById('alternative-weights');
+      if (volume <= 0 || isNaN(volume)) {
+        container.innerHTML = '<em>Nejprve zadejte rozměry pro výpočet.</em>';
+        return;
+      }
       let html = '<ul>';
       for (const [density, label] of Object.entries(densities)) {
         const weight = volume * parseFloat(density);
