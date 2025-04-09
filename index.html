@@ -184,6 +184,22 @@
     .alternative-weights li {
       margin: 4px 0;
     }
+
+    .reset-button {
+      display: block;
+      margin: 20px auto 0;
+      background-color: #164183;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .reset-button:hover {
+      background-color: #0f2e5c;
+    }
   </style>
 </head>
 <body>
@@ -279,6 +295,8 @@
 
     <button class="toggle-alternatives" onclick="toggleAlternatives()">Zobrazit hmotnosti pro jiné materiály</button>
     <div id="alternative-weights" class="alternative-weights"></div>
+
+    <button class="reset-button" onclick="resetInputs()">Vymazat vše</button>
   </div>
 
   <script>
@@ -429,6 +447,21 @@
     inputs.forEach(input => {
       input.addEventListener('input', calculateWeight);
     });
+
+    function resetInputs() {
+      const inputs = document.querySelectorAll('input');
+      inputs.forEach(input => input.value = '');
+
+      document.getElementById('material').value = '7850';
+      document.getElementById('custom-density-container').style.display = 'none';
+      selectedType = null;
+      hideAllForms();
+      const tiles = document.querySelectorAll('.tile');
+      tiles.forEach(tile => tile.classList.remove('active'));
+      document.getElementById('weight').textContent = '0,00';
+      document.getElementById('alternative-weights').style.display = 'none';
+    }
+
   </script>
 </body>
 </html>
