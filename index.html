@@ -103,7 +103,7 @@
       margin-top: 20px;
       text-align: center;
       color: #164183;
-      display: flex;
+      display: none;
       justify-content: center;
       align-items: center;
       gap: 10px;
@@ -149,7 +149,7 @@
       cursor: pointer;
       font-size: 14px;
       margin: 20px auto 0;
-      display: block;
+      display: none;
       transition: background-color 0.3s;
     }
 
@@ -197,7 +197,6 @@
       <div class="tile" onclick="selectType('sheet')">Plech</div>
     </div>
 
-    <!-- Výběr materiálu -->
     <div class="form-section" id="material-selection" style="display:none;">
       <label for="material">Materiál:</label>
       <select id="material">
@@ -214,7 +213,6 @@
       <input type="number" id="custom-density" placeholder="Hustota v kg/m³" />
     </div>
 
-    <!-- Formuláře pro jednotlivé typy -->
     <div class="form-section" id="rod-form" style="display: none;">
       <label for="diameter">Průměr tyče d (mm):</label>
       <input type="number" id="diameter" placeholder="Průměr v mm" />
@@ -249,16 +247,18 @@
       </div>
     </div>
 
-    <div class="result" id="result" style="display:none;">
+    <div class="result" id="result">
       Hmotnost: <span id="weight">0</span> kg
       <span class="copy-icon" onclick="copyWeight()" title="Zkopírovat">📋</span>
     </div>
 
-    <button class="toggle-alternatives" onclick="toggleAlternatives()" style="display:none;">Zobrazit hmotnosti pro jiné materiály</button>
+    <button class="toggle-alternatives" onclick="toggleAlternatives()">Zobrazit hmotnosti pro jiné materiály</button>
     <div id="alternative-weights" class="alternative-weights"></div>
   </div>
 
   <script>
+    let selectedType = null;
+
     const densities = {
       7850: "Uhlíková ocel",
       7900: "Nerezová ocel",
@@ -271,23 +271,33 @@
     }
 
     function selectType(type) {
+      if (selectedType === type) {
+        selectedType = null;
+        hideAllForms();
+        return;
+      }
+
+      selectedType = type;
       document.getElementById('material-selection').style.display = 'block';
-      document.getElementById('rod-form').style.display = 'none';
-      document.getElementById('tube-form').style.display = 'none';
-      document.getElementById('sheet-form').style.display = 'none';
       document.getElementById('result').style.display = 'flex';
       document.querySelector('.toggle-alternatives').style.display = 'block';
 
-      document.getElementById('type')?.remove(); // pokud by ještě někde byl
+      document.getElementById('rod-form').style.display = type === 'rod' ? 'block' : 'none';
+      document.getElementById('tube-form').style.display = type === 'tube' ? 'block' : 'none';
+      document.getElementById('sheet-form').style.display = type === 'sheet' ? 'block' : 'none';
 
-      if (type === 'rod') {
-        document.getElementById('rod-form').style.display = 'block';
-      } else if (type === 'tube') {
-        document.getElementById('tube-form').style.display = 'block';
-      } else if (type === 'sheet') {
-        document.getElementById('sheet-form').style.display = 'block';
-      }
       calculateWeight();
+    }
+
+    function hideAllForms() {
+      document.getElementById('rod-form').style.display = 'none';
+      document.getElementById('tube-form').style.display = 'none';
+      document.getElementById('sheet-form').style.display = 'none';
+      document.getElementById('material-selection').style.display = 'none';
+      document.getElementById('custom-density-container').style.display = 'none';
+      document.getElementById('result').style.display = 'none';
+      document.querySelector('.toggle-alternatives').style.display = 'none';
+      document.getElementById('alternative-weights').style.display = 'none';
     }
 
     function getVolume() {
