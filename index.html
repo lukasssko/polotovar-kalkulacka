@@ -197,6 +197,18 @@
       cursor: pointer;
     }
 
+    .reset-button {
+      display: none;
+      margin: 20px auto 0;
+      background-color: #164183;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
     .reset-button:hover {
       background-color: #0f2e5c;
     }
@@ -296,7 +308,7 @@
     <button class="toggle-alternatives" onclick="toggleAlternatives()">Zobrazit hmotnosti pro jiné materiály</button>
     <div id="alternative-weights" class="alternative-weights"></div>
 
-    <button class="reset-button" onclick="resetInputs()">Vymazat vše</button>
+    <button class="reset-button" id="reset-button" onclick="resetInputs()">Vymazat hodnoty</button>
   </div>
 
   <script>
@@ -321,9 +333,6 @@
       };
 
       if (selectedType === type) {
-        selectedType = null;
-        hideAllForms();
-        Object.values(tileElements).forEach(el => el.classList.remove('active'));
         return;
       }
 
@@ -335,6 +344,7 @@
       document.getElementById('material-selection').style.display = 'block';
       document.getElementById('result').style.display = 'flex';
       document.querySelector('.toggle-alternatives').style.display = 'block';
+      document.getElementById('reset-button').style.display = 'block';
 
       document.getElementById('rod-form').style.display = type === 'rod' ? 'block' : 'none';
       document.getElementById('tube-form').style.display = type === 'tube' ? 'block' : 'none';
@@ -449,17 +459,17 @@
     });
 
     function resetInputs() {
-      const inputs = document.querySelectorAll('input');
+      const formId = selectedType === 'rod' ? 'rod-form'
+                    : selectedType === 'tube' ? 'tube-form'
+                    : selectedType === 'sheet' ? 'sheet-form'
+                    : null;
+      if (!formId) return;
+
+      const inputs = document.querySelectorAll(`#${formId} input`);
       inputs.forEach(input => input.value = '');
 
-      document.getElementById('material').value = '7850';
-      document.getElementById('custom-density-container').style.display = 'none';
-      selectedType = null;
-      hideAllForms();
-      const tiles = document.querySelectorAll('.tile');
-      tiles.forEach(tile => tile.classList.remove('active'));
-      document.getElementById('weight').textContent = '0,00';
-      document.getElementById('alternative-weights').style.display = 'none';
+      document.getElementById('custom-density').value = '';
+      calculateWeight();
     }
 
   </script>
