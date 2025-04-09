@@ -117,6 +117,11 @@
     #custom-density-container {
       display: none;
     }
+
+    .comparison-results {
+      margin-top: 20px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -193,6 +198,9 @@
     </div>
 
     <button class="copy-button" onclick="copyWeight()">Zkopírovat hmotnost</button>
+    <button class="copy-button" onclick="compareMaterials()">Porovnat materiály</button>
+
+    <div class="comparison-results" id="comparison-results"></div>
   </div>
 
   <script>
@@ -243,6 +251,23 @@
       }
 
       document.getElementById('weight').textContent = weight.toFixed(2).replace('.', ',');
+      return weight;
+    }
+
+    function compareMaterials() {
+      const materials = [7850, 7900, 2700, 1200];
+      const materialNames = ["Uhlíková ocel", "Nerezová ocel", "Hliník", "Plast"];
+      const weightResults = materials.map(density => {
+        let weight = calculateWeight();
+        return (weight * (density / 7850)).toFixed(2);  // Adjust based on the selected density
+      });
+
+      let comparisonHtml = "<h3>Porovnání materiálů:</h3><ul>";
+      weightResults.forEach((weight, index) => {
+        comparisonHtml += `<li><strong>${materialNames[index]}:</strong> ${weight} kg</li>`;
+      });
+      comparisonHtml += "</ul>";
+      document.getElementById('comparison-results').innerHTML = comparisonHtml;
     }
 
     function copyWeight() {
