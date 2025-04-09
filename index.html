@@ -320,6 +320,9 @@
       };
 
       if (selectedType === type) {
+        selectedType = null;
+        Object.values(tileElements).forEach(el => el.classList.remove('active'));
+        hideAllForms();
         return;
       }
 
@@ -345,9 +348,9 @@
       document.getElementById('tube-form').style.display = 'none';
       document.getElementById('sheet-form').style.display = 'none';
       document.getElementById('material-selection').style.display = 'none';
-      document.getElementById('custom-density-container').style.display = 'none';
       document.getElementById('result').style.display = 'none';
       document.querySelector('.toggle-alternatives').style.display = 'none';
+      document.getElementById('reset-button').style.display = 'none';
       document.getElementById('alternative-weights').style.display = 'none';
     }
 
