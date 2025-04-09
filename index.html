@@ -79,20 +79,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 10px; /* mezera mezi hmotností a ikonou */
+      gap: 10px;
     }
 
     .copy-icon {
       cursor: pointer;
       font-size: 20px;
       color: #90181c;
-    }
-
-    .copy-icon:hover::after {
-      content: " Zkopírovat";
-      font-size: 14px;
-      color: #444;
-      margin-left: 5px;
     }
 
     .image-container {
@@ -204,12 +197,10 @@
   </div>
 
   <script>
-    // Funkce pro přepčet mm na metry
     function mmToMeters(mm) {
       return mm / 1000;
     }
 
-    // Výpočet hmotnosti podle typu polotovaru a vstupů
     function calculateWeight() {
       const type = document.getElementById('type').value;
       let densityInput = document.getElementById('material').value;
@@ -223,8 +214,8 @@
         const d = mmToMeters(parseFloat(document.getElementById('diameter').value));
         const l = mmToMeters(parseFloat(document.getElementById('length').value));
         if (d && l && density) {
-          const volume_m3 = Math.PI * Math.pow(d / 2, 2) * l; // objem v m^3
-          weight = volume_m3 * density; // hmotnost = objem * hustota
+          const volume_m3 = Math.PI * Math.pow(d / 2, 2) * l;
+          weight = volume_m3 * density;
         }
       } else if (type === "tube") {
         const D = mmToMeters(parseFloat(document.getElementById('outer-diameter').value));
@@ -248,7 +239,6 @@
       document.getElementById('weight').textContent = weight.toFixed(2).replace('.', ',');
     }
 
-    // Funkce pro zkopírování hmotnosti do schránky
     function copyWeight() {
       const weight = document.getElementById('weight').textContent;
       navigator.clipboard.writeText(weight)
@@ -256,7 +246,6 @@
         .catch(err => alert("Chyba při kopírování: " + err));
     }
 
-    // Přepínání formulářů dle zvoleného typu polotovaru
     document.getElementById('type').addEventListener('change', function () {
       const type = this.value;
       document.getElementById('rod-form').style.display = type === 'rod' ? 'block' : 'none';
@@ -265,7 +254,6 @@
       calculateWeight();
     });
 
-    // Zobrazení pole pro vlastní hustotu
     document.getElementById('material').addEventListener('change', function () {
       const material = this.value;
       const customDensityContainer = document.getElementById('custom-density-container');
@@ -277,7 +265,6 @@
       calculateWeight();
     });
 
-    // Spuštění výpočtu po změně vstupu nebo po stisku Enter
     document.addEventListener('keydown', function(event) {
       if (event.key === 'Enter') {
         event.preventDefault();
