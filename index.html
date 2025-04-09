@@ -59,6 +59,7 @@
       justify-content: space-around;
       gap: 10px;
       margin-bottom: 20px;
+      flex-wrap: wrap;
     }
 
     .tile {
@@ -69,11 +70,18 @@
       cursor: pointer;
       text-align: center;
       flex: 1;
-      transition: background-color 0.3s;
+      transition: background-color 0.3s, border-color 0.3s;
+      min-width: 120px;
     }
 
     .tile:hover {
       background-color: #dbe6f7;
+    }
+
+    .tile.active {
+      background-color: #508cbc;
+      border-color: #90181c;
+      color: white;
     }
 
     .form-section {
@@ -141,7 +149,7 @@
     }
 
     .toggle-alternatives {
-      background-color: #164183;
+      background-color: #90181c;
       border: none;
       color: white;
       padding: 10px 15px;
@@ -154,7 +162,7 @@
     }
 
     .toggle-alternatives:hover {
-      background-color: #0f2c5c;
+      background-color: #c4341e;
     }
 
     .alternative-weights {
@@ -192,9 +200,9 @@
     </div>
 
     <div class="tile-selection">
-      <div class="tile" onclick="selectType('rod')">Tyč</div>
-      <div class="tile" onclick="selectType('tube')">Trubka</div>
-      <div class="tile" onclick="selectType('sheet')">Plech</div>
+      <div class="tile" id="tile-rod" onclick="selectType('rod')">Tyč</div>
+      <div class="tile" id="tile-tube" onclick="selectType('tube')">Trubka</div>
+      <div class="tile" id="tile-sheet" onclick="selectType('sheet')">Plech</div>
     </div>
 
     <div class="form-section" id="material-selection" style="display:none;">
@@ -271,13 +279,24 @@
     }
 
     function selectType(type) {
+      const tileElements = {
+        rod: document.getElementById('tile-rod'),
+        tube: document.getElementById('tile-tube'),
+        sheet: document.getElementById('tile-sheet')
+      };
+
       if (selectedType === type) {
         selectedType = null;
         hideAllForms();
+        Object.values(tileElements).forEach(el => el.classList.remove('active'));
         return;
       }
 
       selectedType = type;
+      Object.entries(tileElements).forEach(([key, el]) => {
+        el.classList.toggle('active', key === type);
+      });
+
       document.getElementById('material-selection').style.display = 'block';
       document.getElementById('result').style.display = 'flex';
       document.querySelector('.toggle-alternatives').style.display = 'block';
