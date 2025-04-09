@@ -110,6 +110,11 @@
       background-color: #ffecec;
     }
 
+    input.valid {
+      border-color: green;
+      background-color: #eaffea;
+    }
+
     .error-message {
       color: red;
       font-size: 12px;
@@ -386,19 +391,31 @@
     return 0;
   }
 
-    function validateInputs() {
-    let valid = true;
-    document.querySelectorAll('input[type="number"]').forEach(input => {
+   function validateInputs() {
+  let valid = true;
+  document.querySelectorAll('input[type="number"]').forEach(input => {
     const value = parseFloat(input.value);
+    const errorId = input.id + "-error";
+    let errorElem = document.getElementById(errorId);
+    if (!errorElem) {
+      errorElem = document.createElement("div");
+      errorElem.className = "error-message";
+      errorElem.id = errorId;
+      input.insertAdjacentElement("afterend", errorElem);
+    }
     if (input.offsetParent !== null && (isNaN(value) || value <= 0)) {
       input.classList.add('invalid');
+      input.classList.remove('valid');
+      errorElem.textContent = "Zadejte kladnou hodnotu";
+      errorElem.style.display = "block";
       valid = false;
     } else {
       input.classList.remove('invalid');
+      input.classList.add('valid');
+      errorElem.style.display = "none";
     }
   });
-  return valid;
-}
+     
     function calculateWeight() {
   if (!validateInputs()) {
     document.getElementById('weight').textContent = '0,00';
@@ -411,6 +428,31 @@
   const weight = isNaN(volume) || isNaN(density) || volume === 0 ? 0 : volume * density;
   document.getElementById('weight').textContent = weight > 0 ? weight.toFixed(2).replace('.', ',') : '0,00';
   updateAlternativeWeights(volume);
+}
+
+     const outer = document.getElementById('outer-diameter');
+  const wall = document.getElementById('wall-thickness');
+  if (outer && wall && outer.offsetParent !== null && wall.offsetParent !== null) {
+    const D = parseFloat(outer.value);
+    const t = parseFloat(wall.value);
+    if (!isNaN(D) && !isNaN(t) && t * 2 >= D) {
+      wall.classList.add('invalid');
+      wall.classList.remove('valid');
+      const errorId = wall.id + "-error";
+      let errorElem = document.getElementById(errorId);
+      if (!errorElem) {
+        errorElem = document.createElement("div");
+        errorElem.className = "error-message";
+        errorElem.id = errorId;
+        wall.insertAdjacentElement("afterend", errorElem);
+      }
+      errorElem.textContent = "Tloušťka stěny musí být menší než polovina vnějšího průměru";
+      errorElem.style.display = "block";
+      valid = false;
+    }
+  }
+
+  return valid;
 }
 
     function updateAlternativeWeights(volume) {
