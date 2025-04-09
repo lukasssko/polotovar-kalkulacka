@@ -5,7 +5,142 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Kalkulačka pro výpočet hmotnosti polotovaru</title>
   <style>
-    /* Vaše stávající CSS zůstává stejné */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      background-color: white;
+      padding: 20px 40px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    header img {
+      max-width: 150px;
+      margin-right: 20px;
+    }
+
+    .title-container {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 24px;
+      color: #164183;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 360px;
+      margin: 30px auto;
+      background-color: white;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 10px;
+    }
+
+    .form-section {
+      margin-bottom: 15px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin: 5px 0;
+      color: #164183;
+    }
+
+    input[type="number"],
+    select {
+      padding: 8px;
+      width: 100%;
+      box-sizing: border-box;
+      margin: 5px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .result {
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 20px;
+      text-align: center;
+      color: #164183;
+    }
+
+    .copy-button {
+      background-color: #90181c;
+      margin-top: 10px;
+      padding: 10px;
+      width: 100%;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      color: white;
+    }
+
+    .copy-button:hover {
+      background-color: #c4341e;
+    }
+
+    .image-container {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .image-container img {
+      max-width: 80%;
+      height: auto;
+      margin: 10px 0;
+      max-height: 200px;
+      object-fit: contain;
+    }
+
+    #tube-form .image-container img {
+      max-width: 100%;
+      max-height: 250px;
+      display: block;
+      margin: 0 auto;
+      transform: translateX(-10px);
+    }
+
+    #custom-density-container {
+      display: none;
+    }
+
+    #comparison-results {
+      display: none;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      color: #164183;
+    }
+
+    .compare-button {
+      background-color: #164183;
+      color: white;
+      padding: 10px;
+      width: 100%;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .compare-button:hover {
+      background-color: #0e3368;
+    }
   </style>
 </head>
 <body>
@@ -18,7 +153,64 @@
   </header>
 
   <div class="container">
-    <!-- Vaše formuláře pro zadání údajů zůstávají stejné -->
+    <div class="form-section">
+      <label for="type">Typ polotovaru:</label>
+      <select id="type">
+        <option value="rod">Tyč</option>
+        <option value="tube">Trubka</option>
+        <option value="sheet">Plech</option>
+      </select>
+    </div>
+
+    <div class="form-section">
+      <label for="material">Materiál:</label>
+      <select id="material">
+        <option value="7850">Uhlíková ocel (7850 kg/m³)</option>
+        <option value="7900">Nerezová ocel (7900 kg/m³)</option>
+        <option value="2700">Hliník (2700 kg/m³)</option>
+        <option value="1200">Plast (1200 kg/m³)</option>
+        <option value="custom">Vlastní</option>
+      </select>
+    </div>
+
+    <div id="custom-density-container" class="form-section">
+      <label for="custom-density">Zadejte vlastní hustotu (kg/m³):</label>
+      <input type="number" id="custom-density" placeholder="Hustota v kg/m³" />
+    </div>
+
+    <div class="form-section" id="rod-form">
+      <label for="diameter">Průměr tyče d (mm):</label>
+      <input type="number" id="diameter" placeholder="Průměr v mm" />
+      <label for="length">Délka tyče (mm):</label>
+      <input type="number" id="length" placeholder="Délka v mm" />
+      <div class="image-container">
+        <img src="images/rod_image.jpg" alt="Obrázek tyče" />
+      </div>
+    </div>
+
+    <div class="form-section" id="tube-form" style="display: none;">
+      <label for="outer-diameter">Vnější průměr trubky D (mm):</label>
+      <input type="number" id="outer-diameter" placeholder="Vnější průměr v mm" />
+      <label for="wall-thickness">Tloušťka stěny t (mm):</label>
+      <input type="number" id="wall-thickness" placeholder="Tloušťka stěny v mm" />
+      <label for="length-tube">Délka trubky (mm):</label>
+      <input type="number" id="length-tube" placeholder="Délka trubky v mm" />
+      <div class="image-container">
+        <img src="images/tube_image.jpg" alt="Obrázek trubky" />
+      </div>
+    </div>
+
+    <div class="form-section" id="sheet-form" style="display: none;">
+      <label for="width">Šířka plechu b (mm):</label>
+      <input type="number" id="width" placeholder="Šířka plechu v mm" />
+      <label for="thickness">Tloušťka plechu t (mm):</label>
+      <input type="number" id="thickness" placeholder="Tloušťka plechu v mm" />
+      <label for="height">Délka plechu (mm):</label>
+      <input type="number" id="height" placeholder="Délka plechu v mm" />
+      <div class="image-container">
+        <img src="images/sheet_image.jpg" alt="Obrázek plechu" />
+      </div>
+    </div>
 
     <div class="result" id="result">
       Hmotnost: <span id="weight">0</span> kg
