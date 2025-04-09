@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -201,12 +200,6 @@
     .reset-button:hover {
       background-color: #c4341e;
     }
-
-    .input-error {
-      border: 2px solid red !important;
-      background-color: #ffe5e5;
-    }
-
   </style>
 </head>
 <body>
@@ -463,37 +456,11 @@
       if (!formId) return;
 
       const inputs = document.querySelectorAll(`#${formId} input`);
-      inputs.forEach(input => {
-        input.value = '';
-        input.classList.remove('input-error');
-      });
+      inputs.forEach(input => input.value = '');
 
       document.getElementById('custom-density').value = '';
       calculateWeight();
     }
-
-    function validateInputs() {
-      const formId = selectedType === 'rod' ? 'rod-form'
-                    : selectedType === 'tube' ? 'tube-form'
-                    : selectedType === 'sheet' ? 'sheet-form'
-                    : null;
-      if (!formId) return;
-
-      const inputs = document.querySelectorAll(`#${formId} input`);
-      inputs.forEach(input => {
-        if (input.value === '' || isNaN(parseFloat(input.value))) {
-          input.classList.add('input-error');
-        } else {
-          input.classList.remove('input-error');
-        }
-      });
-    }
-
-    const inputs = document.querySelectorAll('input');
-    inputs.forEach(input => {
-      input.addEventListener('blur', validateInputs);
-      input.addEventListener('input', validateInputs);
-    });
 
   </script>
 </body>
