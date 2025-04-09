@@ -473,6 +473,20 @@
       calculateWeight();
     }
 
+    // Přidání odebrání .valid i při mazání tlačítkem "Vymazat hodnoty"
+    function resetInputs() {
+      const formId = ['rod-form', 'tube-form', 'sheet-form'].find(id => {
+      return document.getElementById(id) && document.getElementById(id).style.display === 'block';
+    });
+      if (!formId) return;
+
+      const inputs = document.querySelectorAll(`#${formId} input`);
+      inputs.forEach(input => {
+      input.value = '';
+      input.classList.remove('valid');
+    });
+  }
+
     function validateInputs() {
     const visibleForm = ['rod-form', 'tube-form', 'sheet-form'].find(id => {
       return document.getElementById(id) && document.getElementById(id).style.display === 'block';
