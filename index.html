@@ -12,17 +12,15 @@
       padding: 0;
     }
 
-    .input-error {
-      border: 2px solid red !important;
+    input {
+      border: 2px solid red;
       background-color: #ffe5e5;
+      transition: all 0.2s ease;
     }
 
-    .error-message {
-      color: red;
-      font-size: 12px;
-      display: none;
-      margin-top: -5px;
-      margin-bottom: 10px;
+    input.valid {
+      border-color: green;
+      background-color: #e5ffe5;
     }
 
     header {
@@ -477,35 +475,31 @@
 
     function validateInputs() {
     const visibleForm = ['rod-form', 'tube-form', 'sheet-form'].find(id => {
-      return document.getElementById(id).style.display === 'block';
+      return document.getElementById(id) && document.getElementById(id).style.display === 'block';
     });
 
     if (!visibleForm) return;
 
     const inputs = document.querySelectorAll(`#${visibleForm} input`);
     inputs.forEach(input => {
-      const errorSpan = input.nextElementSibling;
       if (input.value.trim() === '' || isNaN(parseFloat(input.value))) {
-        input.classList.add('input-error');
-        if (errorSpan && errorSpan.classList.contains('error-message')) {
-          errorSpan.style.display = 'block';
-        }
+        input.classList.remove('valid');
       } else {
-        input.classList.remove('input-error');
-        if (errorSpan && errorSpan.classList.contains('error-message')) {
-          errorSpan.style.display = 'none';
-        }
+        input.classList.add('valid');
       }
     });
   }
 
     document.querySelectorAll('input').forEach(input => {
-    const error = document.createElement('div');
-    error.classList.add('error-message');
-    error.textContent = 'Vyplňte platnou hodnotu';
-    input.insertAdjacentElement('afterend', error);
-    input.addEventListener('blur', validateInputs);
     input.addEventListener('input', validateInputs);
+    input.addEventListener('blur', validateInputs);
+  });
+
+  // Předvybarvení všech inputů jako chybné na začátku
+  window.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('input').forEach(input => {
+      input.classList.remove('valid');
+    });
   });
 
   </script>
