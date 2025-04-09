@@ -119,27 +119,13 @@
     }
 
     #comparison-results {
-      display: none;
       margin-top: 20px;
-      padding: 10px;
-      background-color: #f9f9f9;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      color: #164183;
+      display: none;
+      text-align: center;
     }
 
-    .compare-button {
-      background-color: #164183;
-      color: white;
-      padding: 10px;
-      width: 100%;
-      border-radius: 4px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    .compare-button:hover {
-      background-color: #0e3368;
+    #comparison-results .comparison {
+      margin: 5px 0;
     }
   </style>
 </head>
@@ -218,7 +204,7 @@
 
     <button class="copy-button" onclick="copyWeight()">Zkopírovat hmotnost</button>
 
-    <button class="compare-button" onclick="toggleComparison()">Porovnat materiály</button>
+    <button class="copy-button" onclick="toggleComparison()">Porovnat materiály</button>
 
     <div id="comparison-results">
       <div id="comparison"></div>
@@ -289,7 +275,7 @@
 
     function toggleComparison() {
       const comparisonDiv = document.getElementById('comparison-results');
-      if (comparisonDiv.style.display === 'none') {
+      if (comparisonDiv.style.display === 'none' || comparisonDiv.style.display === '') {
         comparisonDiv.style.display = 'block';
         updateComparison();
       } else {
@@ -313,6 +299,13 @@
     document.querySelectorAll('input, select').forEach(el => {
       el.addEventListener('input', calculateWeight);
     });
+
+    // Inicializace na začátku pro porovnání
+    window.onload = () => {
+      const comparisonDiv = document.getElementById('comparison-results');
+      comparisonDiv.style.display = 'none'; // Porovnání bude skryté při načítání stránky.
+      updateComparison(0); // Inicializujeme porovnání při načtení stránky
+    };
   </script>
 
 </body>
