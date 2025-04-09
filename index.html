@@ -221,8 +221,7 @@
     <button class="compare-button" onclick="toggleComparison()">Porovnat materiály</button>
 
     <div id="comparison-results">
-      <h4>Porovnání materiálů:</h4>
-      <div id="comparison-text"></div>
+      <div id="comparison"></div>
     </div>
   </div>
 
@@ -274,6 +273,11 @@
       }
 
       document.getElementById('weight').textContent = weight.toFixed(2).replace('.', ',');
+
+      // Update comparison automatically
+      if (document.getElementById('comparison-results').style.display === 'block') {
+        updateComparison(weight);
+      }
     }
 
     function copyWeight() {
@@ -284,69 +288,31 @@
     }
 
     function toggleComparison() {
-      const comparisonResults = document.getElementById('comparison-results');
-      const comparisonText = document.getElementById('comparison-text');
-      const material = document.getElementById('material').value;
-      const type = document.getElementById('type').value;
-      
-      if (comparisonResults.style.display === 'none') {
-        comparisonResults.style.display = 'block';
-        let comparisonInfo = `<p>Hmotnost pro různé materiály při stejné geometrické velikosti:</p>`;
-        
-        // Calculate weights for different materials
-        for (const [density, materialName] of Object.entries(densities)) {
-          if (material === 'custom' || material !== density) {
-            let weightComparison = 0;
-            if (type === "rod") {
-              const d = mmToMeters(parseFloat(document.getElementById('diameter').value));
-              const l = mmToMeters(parseFloat(document.getElementById('length').value));
-              if (d && l && density) {
-                const volume_m3 = Math.PI * Math.pow(d / 2, 2) * l;
-                weightComparison = volume_m3 * parseFloat(density);
-              }
-            }
-            // Add the calculated weight for comparison
-            comparisonInfo += `<p><strong>${materialName}</strong>: ${weightComparison.toFixed(2).replace('.', ',')} kg</p>`;
-          }
-        }
-        comparisonText.innerHTML = comparisonInfo;
+      const comparisonDiv = document.getElementById('comparison-results');
+      if (comparisonDiv.style.display === 'none') {
+        comparisonDiv.style.display = 'block';
+        updateComparison();
       } else {
-        comparisonResults.style.display = 'none';
+        comparisonDiv.style.display = 'none';
       }
     }
 
-    document.getElementById('type').addEventListener('change', function () {
-      const type = this.value;
-      document.getElementById('rod-form').style.display = type === 'rod' ? 'block' : 'none';
-      document.getElementById('tube-form').style.display = type === 'tube' ? 'block' : 'none';
-      document.getElementById('sheet-form').style.display = type === 'sheet' ? 'block' : 'none';
-      calculateWeight();
-    });
-
-    document.getElementById('material').addEventListener('change', function () {
-      const material = this.value;
-      const customDensityContainer = document.getElementById('custom-density-container');
-      if (material === 'custom') {
-        customDensityContainer.style.display = 'block';
-      } else {
-        customDensityContainer.style.display = 'none';
+    function updateComparison(currentWeight) {
+      const material = document.getElementById('material').value;
+      let comparisonHTML = '<strong>Porovnání materiálů:</strong><br>';
+      
+      for (const [density, name] of Object.entries(densities)) {
+        const weight = currentWeight * (density / parseFloat(material));
+        comparisonHTML += `${name}: ${weight.toFixed(2).replace('.', ',')} kg<br>`;
       }
-      calculateWeight();
-    });
 
-    document.addEventListener('keydown', function(event) {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        calculateWeight();
-      }
-    });
+      document.getElementById('comparison').innerHTML = comparisonHTML;
+    }
 
-    const inputs = document.querySelectorAll('input, select');
-    inputs.forEach(input => {
-      input.addEventListener('input', calculateWeight);
+    // Event listeners for input changes
+    document.querySelectorAll('input, select').forEach(el => {
+      el.addEventListener('input', calculateWeight);
     });
-
-    window.onload = calculateWeight;
   </script>
 
 </body>
