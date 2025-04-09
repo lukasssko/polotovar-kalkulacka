@@ -119,7 +119,7 @@
     }
 
     #comparison-results {
-      display: none;
+      display: block;
       margin-top: 20px;
       padding: 10px;
       background-color: #f9f9f9;
@@ -218,8 +218,6 @@
 
     <button class="copy-button" onclick="copyWeight()">Zkopírovat hmotnost</button>
 
-    <button class="compare-button" onclick="toggleComparison()">Porovnat materiály</button>
-
     <div id="comparison-results">
       <div id="comparison"></div>
     </div>
@@ -276,7 +274,7 @@
 
       document.getElementById('weight').textContent = weight.toFixed(2).replace('.', ',');
 
-      // Automaticky počítáme porovnání na pozadí
+      // Automatické porovnání při každé změně
       updateComparison(weight);
     }
 
@@ -285,16 +283,6 @@
       navigator.clipboard.writeText(weight)
         .then(() => alert("Hmotnost zkopírována: " + weight))
         .catch(err => alert("Chyba při kopírování: " + err));
-    }
-
-    function toggleComparison() {
-      const comparisonDiv = document.getElementById('comparison-results');
-      if (comparisonDiv.style.display === 'none') {
-        comparisonDiv.style.display = 'block';
-        displayComparison();
-      } else {
-        comparisonDiv.style.display = 'none';
-      }
     }
 
     function updateComparison(currentWeight) {
@@ -308,6 +296,8 @@
       }
 
       currentComparisonResults = comparison;  // Ukládáme výsledky pro pozdější zobrazení
+
+      displayComparison(); // Aktualizace porovnání při každé změně
     }
 
     function displayComparison() {
