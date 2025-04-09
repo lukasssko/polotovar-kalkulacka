@@ -105,6 +105,17 @@
       border-radius: 4px;
     }
 
+    input.invalid {
+      border-color: red;
+      background-color: #ffecec;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 12px;
+      display: none;
+    }
+
     .result {
       font-size: 18px;
       font-weight: bold;
@@ -375,14 +386,32 @@
     return 0;
   }
 
-    function calculateWeight() {
-      const volume = getVolume();
-      let densityInput = document.getElementById('material').value;
-      let density = densityInput === 'custom' ? parseFloat(document.getElementById('custom-density').value) : parseFloat(densityInput);
-      const weight = isNaN(volume) || isNaN(density) || volume === 0 ? 0 : volume * density;
-      document.getElementById('weight').textContent = weight > 0 ? weight.toFixed(2).replace('.', ',') : '0,00';
-      updateAlternativeWeights(volume);
+    function validateInputs() {
+    let valid = true;
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+    const value = parseFloat(input.value);
+    if (input.offsetParent !== null && (isNaN(value) || value <= 0)) {
+      input.classList.add('invalid');
+      valid = false;
+    } else {
+      input.classList.remove('invalid');
     }
+  });
+  return valid;
+}
+    function calculateWeight() {
+  if (!validateInputs()) {
+    document.getElementById('weight').textContent = '0,00';
+    updateAlternativeWeights(0);
+    return;
+  }
+  const volume = getVolume();
+  let densityInput = document.getElementById('material').value;
+  let density = densityInput === 'custom' ? parseFloat(document.getElementById('custom-density').value) : parseFloat(densityInput);
+  const weight = isNaN(volume) || isNaN(density) || volume === 0 ? 0 : volume * density;
+  document.getElementById('weight').textContent = weight > 0 ? weight.toFixed(2).replace('.', ',') : '0,00';
+  updateAlternativeWeights(volume);
+}
 
     function updateAlternativeWeights(volume) {
       const container = document.getElementById('alternative-weights');
