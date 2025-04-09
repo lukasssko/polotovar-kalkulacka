@@ -41,12 +41,39 @@
     }
 
     .container {
-      max-width: 360px;
+      max-width: 600px;
       margin: 30px auto;
       background-color: white;
       padding: 20px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       border-radius: 10px;
+    }
+
+    .intro {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .tile-selection {
+      display: flex;
+      justify-content: space-around;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .tile {
+      background-color: #eef3fb;
+      border: 2px solid #164183;
+      border-radius: 10px;
+      padding: 20px;
+      cursor: pointer;
+      text-align: center;
+      flex: 1;
+      transition: background-color 0.3s;
+    }
+
+    .tile:hover {
+      background-color: #dbe6f7;
     }
 
     .form-section {
@@ -152,7 +179,6 @@
   </style>
 </head>
 <body>
-
   <header>
     <img src="images/skodajslogo_image.svg" alt="Logo společnosti" />
     <div class="title-container">
@@ -161,18 +187,18 @@
   </header>
 
   <div class="container">
-    <!-- Výběr typu polotovaru -->
-    <div class="form-section">
-      <label for="type">Typ polotovaru:</label>
-      <select id="type">
-        <option value="rod">Tyč</option>
-        <option value="tube">Trubka</option>
-        <option value="sheet">Plech</option>
-      </select>
+    <div class="intro">
+      <p>Vyberte typ polotovaru, pro který chcete vypočítat hmotnost:</p>
+    </div>
+
+    <div class="tile-selection">
+      <div class="tile" onclick="selectType('rod')">Tyč</div>
+      <div class="tile" onclick="selectType('tube')">Trubka</div>
+      <div class="tile" onclick="selectType('sheet')">Plech</div>
     </div>
 
     <!-- Výběr materiálu -->
-    <div class="form-section">
+    <div class="form-section" id="material-selection" style="display:none;">
       <label for="material">Materiál:</label>
       <select id="material">
         <option value="7850">Uhlíková ocel (7850 kg/m³)</option>
@@ -183,14 +209,13 @@
       </select>
     </div>
 
-    <!-- Vlastní hustota -->
     <div id="custom-density-container" class="form-section">
       <label for="custom-density">Zadejte vlastní hustotu (kg/m³):</label>
       <input type="number" id="custom-density" placeholder="Hustota v kg/m³" />
     </div>
 
-    <!-- Formulář pro tyč -->
-    <div class="form-section" id="rod-form">
+    <!-- Formuláře pro jednotlivé typy -->
+    <div class="form-section" id="rod-form" style="display: none;">
       <label for="diameter">Průměr tyče d (mm):</label>
       <input type="number" id="diameter" placeholder="Průměr v mm" />
       <label for="length">Délka tyče (mm):</label>
@@ -200,7 +225,6 @@
       </div>
     </div>
 
-    <!-- Formulář pro trubku -->
     <div class="form-section" id="tube-form" style="display: none;">
       <label for="outer-diameter">Vnější průměr trubky D (mm):</label>
       <input type="number" id="outer-diameter" placeholder="Vnější průměr v mm" />
@@ -213,7 +237,6 @@
       </div>
     </div>
 
-    <!-- Formulář pro plech -->
     <div class="form-section" id="sheet-form" style="display: none;">
       <label for="width">Šířka plechu b (mm):</label>
       <input type="number" id="width" placeholder="Šířka plechu v mm" />
@@ -226,13 +249,12 @@
       </div>
     </div>
 
-    <!-- Zobrazení výsledku s ikonou -->
-    <div class="result" id="result">
+    <div class="result" id="result" style="display:none;">
       Hmotnost: <span id="weight">0</span> kg
       <span class="copy-icon" onclick="copyWeight()" title="Zkopírovat">📋</span>
     </div>
 
-    <button class="toggle-alternatives" onclick="toggleAlternatives()">Zobrazit hmotnosti pro jiné materiály</button>
+    <button class="toggle-alternatives" onclick="toggleAlternatives()" style="display:none;">Zobrazit hmotnosti pro jiné materiály</button>
     <div id="alternative-weights" class="alternative-weights"></div>
   </div>
 
@@ -248,21 +270,40 @@
       return mm / 1000;
     }
 
+    function selectType(type) {
+      document.getElementById('material-selection').style.display = 'block';
+      document.getElementById('rod-form').style.display = 'none';
+      document.getElementById('tube-form').style.display = 'none';
+      document.getElementById('sheet-form').style.display = 'none';
+      document.getElementById('result').style.display = 'flex';
+      document.querySelector('.toggle-alternatives').style.display = 'block';
+
+      document.getElementById('type')?.remove(); // pokud by ještě někde byl
+
+      if (type === 'rod') {
+        document.getElementById('rod-form').style.display = 'block';
+      } else if (type === 'tube') {
+        document.getElementById('tube-form').style.display = 'block';
+      } else if (type === 'sheet') {
+        document.getElementById('sheet-form').style.display = 'block';
+      }
+      calculateWeight();
+    }
+
     function getVolume() {
-      const type = document.getElementById('type').value;
-      if (type === "rod") {
+      if (document.getElementById('rod-form').style.display === 'block') {
         const d = mmToMeters(parseFloat(document.getElementById('diameter').value));
         const l = mmToMeters(parseFloat(document.getElementById('length').value));
         if (isNaN(d) || isNaN(l)) return 0;
         return Math.PI * Math.pow(d / 2, 2) * l;
-      } else if (type === "tube") {
+      } else if (document.getElementById('tube-form').style.display === 'block') {
         const D = mmToMeters(parseFloat(document.getElementById('outer-diameter').value));
         const t = mmToMeters(parseFloat(document.getElementById('wall-thickness').value));
         const l = mmToMeters(parseFloat(document.getElementById('length-tube').value));
         if (isNaN(D) || isNaN(t) || isNaN(l)) return 0;
         const d = D - 2 * t;
         return Math.PI * (Math.pow(D / 2, 2) - Math.pow(d / 2, 2)) * l;
-      } else if (type === "sheet") {
+      } else if (document.getElementById('sheet-form').style.display === 'block') {
         const b = mmToMeters(parseFloat(document.getElementById('width').value));
         const t = mmToMeters(parseFloat(document.getElementById('thickness').value));
         const l = mmToMeters(parseFloat(document.getElementById('height').value));
@@ -308,14 +349,6 @@
         .catch(err => alert("Chyba při kopírování: " + err));
     }
 
-    document.getElementById('type').addEventListener('change', () => {
-      const type = document.getElementById('type').value;
-      document.getElementById('rod-form').style.display = type === 'rod' ? 'block' : 'none';
-      document.getElementById('tube-form').style.display = type === 'tube' ? 'block' : 'none';
-      document.getElementById('sheet-form').style.display = type === 'sheet' ? 'block' : 'none';
-      calculateWeight();
-    });
-
     document.getElementById('material').addEventListener('change', () => {
       const material = document.getElementById('material').value;
       const customDensityContainer = document.getElementById('custom-density-container');
@@ -334,8 +367,6 @@
     inputs.forEach(input => {
       input.addEventListener('input', calculateWeight);
     });
-
-    window.onload = calculateWeight;
   </script>
 </body>
 </html>
