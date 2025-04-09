@@ -78,7 +78,8 @@
       color: #164183;
     }
 
-    .copy-button {
+    .copy-button,
+    .compare-button {
       background-color: #90181c;
       margin-top: 10px;
       padding: 10px;
@@ -87,9 +88,11 @@
       cursor: pointer;
       font-size: 16px;
       color: white;
+      border: none;
     }
 
-    .copy-button:hover {
+    .copy-button:hover,
+    .compare-button:hover {
       background-color: #c4341e;
     }
 
@@ -116,6 +119,16 @@
 
     #custom-density-container {
       display: none;
+    }
+
+    .comparison-results {
+      background-color: #f8f8f8;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 15px;
+      font-size: 14px;
+      color: #333;
     }
   </style>
 </head>
@@ -193,6 +206,9 @@
     </div>
 
     <button class="copy-button" onclick="copyWeight()">Zkopírovat hmotnost</button>
+    <button class="compare-button" onclick="compareMaterials()">Porovnat materiály</button>
+
+    <div class="comparison-results" id="comparison-results" style="display: none;"></div>
   </div>
 
   <script>
@@ -207,12 +223,16 @@
       return mm / 1000;
     }
 
-    function calculateWeight() {
+    function calculateWeight(densityOverride = null) {
       const type = document.getElementById('type').value;
       let densityInput = document.getElementById('material').value;
       let density = densityInput === 'custom'
         ? parseFloat(document.getElementById('custom-density').value)
         : parseFloat(densityInput);
+
+      if (densityOverride !== null) {
+        density = densityOverride;
+      }
 
       let weight = 0;
 
@@ -242,7 +262,11 @@
         }
       }
 
-      document.getElementById('weight').textContent = weight.toFixed(2).replace('.', ',');
+      if (densityOverride === null) {
+        document.getElementById('weight').textContent = weight.toFixed(2).replace('.', ',');
+      }
+
+      return weight;
     }
 
     function copyWeight() {
@@ -250,6 +274,17 @@
       navigator.clipboard.writeText(weight)
         .then(() => alert("Hmotnost zkopírována: " + weight))
         .catch(err => alert("Chyba při kopírování: " + err));
+    }
+
+    function compareMaterials() {
+      let results = "";
+      for (const [value, name] of Object.entries(densities)) {
+        const w = calculateWeight(parseFloat(value));
+        results += `<strong>${name}:</strong> ${w.toFixed(2).replace('.', ',')} kg<br>`;
+      }
+      const container = document.getElementById('comparison-results');
+      container.innerHTML = results;
+      container.style.display = 'block';
     }
 
     document.getElementById('type').addEventListener('change', function () {
@@ -263,11 +298,7 @@
     document.getElementById('material').addEventListener('change', function () {
       const material = this.value;
       const customDensityContainer = document.getElementById('custom-density-container');
-      if (material === 'custom') {
-        customDensityContainer.style.display = 'block';
-      } else {
-        customDensityContainer.style.display = 'none';
-      }
+      customDensityContainer.style.display = material === 'custom' ? 'block' : 'none';
       calculateWeight();
     });
 
