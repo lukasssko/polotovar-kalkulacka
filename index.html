@@ -148,8 +148,8 @@
       display: none;
     }
 
-    .toggle-alternatives {
-      background-color: #90181c;
+   .toggle-alternatives {
+      background-color: #164183;
       border: none;
       color: white;
       padding: 10px 15px;
@@ -162,7 +162,7 @@
     }
 
     .toggle-alternatives:hover {
-      background-color: #c4341e;
+      background-color: #0f2e5c;
     }
 
     .alternative-weights {
@@ -186,21 +186,9 @@
     }
 
     .reset-button {
-      display: block;
-      margin: 20px auto 0;
-      background-color: #164183;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    .reset-button {
       display: none;
-      margin: 20px auto 0;
-      background-color: #164183;
+      margin: 10px auto 0;
+      background-color: #90181c;
       color: white;
       border: none;
       padding: 10px 20px;
@@ -210,7 +198,7 @@
     }
 
     .reset-button:hover {
-      background-color: #0f2e5c;
+      background-color: #c4341e;
     }
   </style>
 </head>
@@ -300,15 +288,14 @@
       </div>
     </div>
 
-    <div class="result" id="result">
+   <div class="result" id="result">
       Hmotnost: <span id="weight">0</span> kg
       <span class="copy-icon" onclick="copyWeight()" title="Zkopírovat">📋</span>
     </div>
 
+    <button class="reset-button" id="reset-button" onclick="resetInputs()">Vymazat hodnoty</button>
     <button class="toggle-alternatives" onclick="toggleAlternatives()">Zobrazit hmotnosti pro jiné materiály</button>
     <div id="alternative-weights" class="alternative-weights"></div>
-
-    <button class="reset-button" id="reset-button" onclick="resetInputs()">Vymazat hodnoty</button>
   </div>
 
   <script>
