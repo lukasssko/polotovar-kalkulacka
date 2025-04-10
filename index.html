@@ -481,6 +481,7 @@
       input.addEventListener('input', calculateWeight);
     });
 
+    // Přidání odebrání .valid i při mazání tlačítkem "Vymazat hodnoty"
     function resetInputs() {
   const formId = ['rod-form', 'tube-form', 'sheet-form', 'l-form'].find(id => {
     return document.getElementById(id) && document.getElementById(id).style.display === 'block';
@@ -501,14 +502,7 @@
   altContainer.style.display = 'block';
 
   calculateWeight();
-}
-
-
-    // Přidání odebrání .valid i při mazání tlačítkem "Vymazat hodnoty"
-    function resetInputs() {
-  const formId = ['rod-form', 'tube-form', 'sheet-form', 'l-form'].find(id => {
-    return document.getElementById(id) && document.getElementById(id).style.display === 'block';
-  });
+});
   if (!formId) return;
 
   const inputs = document.querySelectorAll(`#${formId} input`);
@@ -538,7 +532,6 @@
   altContainer.style.display = 'block';
 
   calculateWeight();
-}
 
     function validateInputs() {
     const visibleForm = ['rod-form', 'tube-form', 'sheet-form'].find(id => {
