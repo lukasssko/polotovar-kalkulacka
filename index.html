@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -239,13 +238,6 @@
   <select id="i-profile-type">
     <option value="ipe">IPE</option>
     <option value="ipn">IPN</option>
-  </select>
-</div>
-
-    <div class="form-section" id="ipn-profile-selection" style="display:none;">
-  <label for="ipn-profile-designation">Označení profilu (IPN):</label>
-  <select id="ipn-profile-designation">
-    <option value="">Načítání...</option>
   </select>
 </div>
 
@@ -546,33 +538,6 @@
       input.classList.remove('valid');
     });
   });
-    
-  function toggleIProfileOptions() {
-    const selected = document.getElementById('i-profile-type').value;
-    document.getElementById('ipn-profile-selection').style.display = selected === 'ipn' ? 'block' : 'none';
-  }
-
-    document.addEventListener('DOMContentLoaded', () => {
-    // Načtení seznamu IPN profilů
-    fetch('polotovar-kalkulacka/datasheets/ipn_datasheet.csv')
-      .then(response => response.text())
-      .then(text => {
-        const lines = text.trim().split('\n');
-        const select = document.getElementById('ipn-profile-designation');
-        select.innerHTML = '<option value="">-- Vyberte označení --</option>';
-        lines.forEach(line => {
-          const cols = line.split(',');
-          if (cols.length > 0) {
-            const option = document.createElement('option');
-            option.value = cols[0].trim();
-            option.textContent = cols[0].trim();
-            select.appendChild(option);
-          }
-        });
-      });
-  });
-
-    
 
   </script>
 </body>
