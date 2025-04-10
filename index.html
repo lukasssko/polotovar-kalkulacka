@@ -502,7 +502,14 @@
   altContainer.style.display = 'block';
 
   calculateWeight();
-});
+}
+
+
+    inputs.forEach(input => {
+      input.addEventListener('input', calculateWeight);
+    });
+
+    );
   if (!formId) return;
 
   const inputs = document.querySelectorAll(`#${formId} input`);
@@ -532,7 +539,7 @@
   altContainer.style.display = 'block';
 
   calculateWeight();
-
+}
     function validateInputs() {
     const visibleForm = ['rod-form', 'tube-form', 'sheet-form'].find(id => {
       return document.getElementById(id) && document.getElementById(id).style.display === 'block';
