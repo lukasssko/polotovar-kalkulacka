@@ -513,12 +513,11 @@
 }
 
     function validateInputs() {
-    const visibleForm = ['rod-form', 'tube-form', 'sheet-form'].find(id => {
-      return document.getElementById(id) && document.getElementById(id).style.display === 'block';
-    });
+  const visibleForm = ['rod-form', 'tube-form', 'sheet-form'].find(id => {
+    return document.getElementById(id) && document.getElementById(id).style.display === 'block';
+  });
 
-    if (!visibleForm) return;
-
+  if (visibleForm) {
     const inputs = document.querySelectorAll(`#${visibleForm} input`);
     inputs.forEach(input => {
       if (input.value.trim() === '' || isNaN(parseFloat(input.value))) {
@@ -529,17 +528,34 @@
     });
   }
 
-    document.querySelectorAll('input').forEach(input => {
-    input.addEventListener('input', validateInputs);
-    input.addEventListener('blur', validateInputs);
-  });
+  // Validace pro vlastní hustotu
+  const customDensityContainer = document.getElementById('custom-density-container');
+  const customDensityInput = document.getElementById('custom-density');
 
-  // Předvybarvení všech inputů jako chybné na začátku
-  window.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('input').forEach(input => {
-      input.classList.remove('valid');
-    });
+  if (customDensityContainer.style.display === 'block') {
+    if (customDensityInput.value.trim() === '' || isNaN(parseFloat(customDensityInput.value))) {
+      customDensityInput.classList.remove('valid');
+    } else {
+      customDensityInput.classList.add('valid');
+    }
+  } else {
+    customDensityInput.classList.remove('valid');
+  }
+}
+
+// Napojení validace na všechna input pole
+document.querySelectorAll('input').forEach(input => {
+  input.addEventListener('input', validateInputs);
+  input.addEventListener('blur', validateInputs);
+});
+
+// Předvybarvení všech inputů jako chybné na začátku
+window.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('input').forEach(input => {
+    input.classList.remove('valid');
   });
+});
+
 
   </script>
 </body>
