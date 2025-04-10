@@ -497,7 +497,7 @@
 
     // Přidání odebrání .valid i při mazání tlačítkem "Vymazat hodnoty"
     function resetInputs() {
-  const formId = ['rod-form', 'tube-form', 'sheet-form'].find(id => {
+  const formId = ['rod-form', 'tube-form', 'sheet-form', 'l-form'].find(id => {
     return document.getElementById(id) && document.getElementById(id).style.display === 'block';
   });
   if (!formId) return;
@@ -510,12 +510,13 @@
 
   document.getElementById('custom-density').value = '';
 
-  // Vymazání alternativních hmotností
-  document.getElementById('alternative-weights').innerHTML = '';
-  document.getElementById('alternative-weights').style.display = 'none';
+  // Vymazání alternativních hmotností, ale ponechat zobrazení
+  const altContainer = document.getElementById('alternative-weights');
+  altContainer.innerHTML = '<em>Nejprve zadejte rozměry pro výpočet.</em>';
+  altContainer.style.display = 'block';
 
   calculateWeight();
-      }
+}
 
     function validateInputs() {
     const visibleForm = ['rod-form', 'tube-form', 'sheet-form'].find(id => {
