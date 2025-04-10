@@ -387,12 +387,15 @@
   allForms.forEach(id => {
     document.getElementById(id).style.display = 'none';
   });
+
   document.getElementById('material-selection').style.display = 'none';
+  document.getElementById('custom-density-container').style.display = 'none'; // ← TADY JE DŮLEŽITÝ ŘÁDEK
   document.getElementById('result').style.display = 'none';
   document.querySelector('.toggle-alternatives').style.display = 'none';
   document.getElementById('reset-button').style.display = 'none';
   document.getElementById('alternative-weights').style.display = 'none';
 }
+
 
 
     function toggleTubeInputs() {
