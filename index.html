@@ -510,6 +510,19 @@
 
   document.getElementById('custom-density').value = '';
 
+  calculateWeight();
+}
+);
+  if (!formId) return;
+
+  const inputs = document.querySelectorAll(`#${formId} input`);
+  inputs.forEach(input => {
+    input.value = '';
+    input.classList.remove('valid');
+  });
+
+  document.getElementById('custom-density').value = '';
+
   // Vymazání alternativních hmotností, ale ponechat zobrazení
   const altContainer = document.getElementById('alternative-weights');
   altContainer.innerHTML = '<em>Nejprve zadejte rozměry pro výpočet.</em>';
