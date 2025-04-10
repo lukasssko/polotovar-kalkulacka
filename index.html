@@ -377,15 +377,17 @@
     }
 
     function hideAllForms() {
-      document.getElementById('rod-form').style.display = 'none';
-      document.getElementById('tube-form').style.display = 'none';
-      document.getElementById('sheet-form').style.display = 'none';
-      document.getElementById('material-selection').style.display = 'none';
-      document.getElementById('result').style.display = 'none';
-      document.querySelector('.toggle-alternatives').style.display = 'none';
-      document.getElementById('reset-button').style.display = 'none';
-      document.getElementById('alternative-weights').style.display = 'none';
-    }
+  const allForms = ['rod-form', 'tube-form', 'sheet-form', 'l-form'];
+  allForms.forEach(id => {
+    document.getElementById(id).style.display = 'none';
+  });
+  document.getElementById('material-selection').style.display = 'none';
+  document.getElementById('result').style.display = 'none';
+  document.querySelector('.toggle-alternatives').style.display = 'none';
+  document.getElementById('reset-button').style.display = 'none';
+  document.getElementById('alternative-weights').style.display = 'none';
+}
+
 
     function toggleTubeInputs() {
     const type = document.getElementById('tube-input-type').value;
