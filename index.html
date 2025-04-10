@@ -230,16 +230,7 @@
       <div class="tile" id="tile-rod" onclick="selectType('rod')">Tyč</div>
       <div class="tile" id="tile-tube" onclick="selectType('tube')">Trubka</div>
       <div class="tile" id="tile-sheet" onclick="selectType('sheet')">Plech</div>
-      <div class="tile" id="tile-i" onclick="selectType('i')">I profil</div>
     </div>
-
-    <div class="form-section" id="i-profile-selection" style="display:none;">
-  <label for="i-profile-type">Typ profilu:</label>
-  <select id="i-profile-type">
-    <option value="ipe">IPE</option>
-    <option value="ipn">IPN</option>
-  </select>
-</div>
 
     <div class="form-section" id="material-selection" style="display:none;">
       <label for="material">Materiál:</label>
@@ -333,34 +324,32 @@
     }
 
     function selectType(type) {
-  const tileElements = {
-    rod: document.getElementById('tile-rod'),
-    tube: document.getElementById('tile-tube'),
-    sheet: document.getElementById('tile-sheet'),
-    i: document.getElementById('tile-i')
-  };
+      const tileElements = {
+        rod: document.getElementById('tile-rod'),
+        tube: document.getElementById('tile-tube'),
+        sheet: document.getElementById('tile-sheet')
+      };
 
-  if (selectedType === type) {
-    selectedType = null;
-    Object.values(tileElements).forEach(el => el.classList.remove('active'));
-    hideAllForms();
-    return;
-  }
+      if (selectedType === type) {
+        selectedType = null;
+        Object.values(tileElements).forEach(el => el.classList.remove('active'));
+        hideAllForms();
+        return;
+      }
 
-  selectedType = type;
-  Object.entries(tileElements).forEach(([key, el]) => {
-    el.classList.toggle('active', key === type);
-  });
+      selectedType = type;
+      Object.entries(tileElements).forEach(([key, el]) => {
+        el.classList.toggle('active', key === type);
+      });
 
-  document.getElementById('material-selection').style.display = 'block';
-  document.getElementById('result').style.display = 'flex';
-  document.querySelector('.toggle-alternatives').style.display = 'block';
-  document.getElementById('reset-button').style.display = 'block';
+      document.getElementById('material-selection').style.display = 'block';
+      document.getElementById('result').style.display = 'flex';
+      document.querySelector('.toggle-alternatives').style.display = 'block';
+      document.getElementById('reset-button').style.display = 'block';
 
-  document.getElementById('rod-form').style.display = type === 'rod' ? 'block' : 'none';
-  document.getElementById('tube-form').style.display = type === 'tube' ? 'block' : 'none';
-  document.getElementById('sheet-form').style.display = type === 'sheet' ? 'block' : 'none';
-  document.getElementById('i-profile-selection').style.display = type === 'i' ? 'block' : 'none';
+      document.getElementById('rod-form').style.display = type === 'rod' ? 'block' : 'none';
+      document.getElementById('tube-form').style.display = type === 'tube' ? 'block' : 'none';
+      document.getElementById('sheet-form').style.display = type === 'sheet' ? 'block' : 'none';
 
       calculateWeight();
     }
@@ -484,32 +473,20 @@
       calculateWeight();
     }
 
+    // Přidání odebrání .valid i při mazání tlačítkem "Vymazat hodnoty"
     function resetInputs() {
-  const formId = ['rod-form', 'tube-form', 'sheet-form'].find(id => {
-    return document.getElementById(id) && document.getElementById(id).style.display === 'block';
-  });
-  if (!formId) return;
+      const formId = ['rod-form', 'tube-form', 'sheet-form'].find(id => {
+      return document.getElementById(id) && document.getElementById(id).style.display === 'block';
+    });
+      if (!formId) return;
 
-  const inputs = document.querySelectorAll(`#${formId} input`);
-  inputs.forEach(input => {
-    input.value = '';
-    input.classList.remove('valid');
-  });
-
-  document.getElementById('custom-density').value = '';
-
-  // Znovu zobrazit alternativní hmotnosti (pokud byly otevřené)
-  const altDiv = document.getElementById('alternative-weights');
-  if (altDiv.style.display === 'block') {
-    altDiv.innerHTML = '';
-  } else {
-    altDiv.style.display = 'block';
+      const inputs = document.querySelectorAll(`#${formId} input`);
+      inputs.forEach(input => {
+      input.value = '';
+      input.classList.remove('valid');
+    });
   }
 
-  document.getElementById('weight').textContent = '0,00';
-
-  calculateWeight();
-}
     function validateInputs() {
     const visibleForm = ['rod-form', 'tube-form', 'sheet-form'].find(id => {
       return document.getElementById(id) && document.getElementById(id).style.display === 'block';
