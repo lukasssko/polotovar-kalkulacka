@@ -52,25 +52,18 @@
     }
 
     .container {
-      max-width: 600px;
+      display: flex;
+      max-width: 1000px;
       margin: 30px auto;
-      background-color: white;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      border-radius: 10px;
-    }
-
-    .intro {
-      text-align: center;
-      margin-bottom: 20px;
+      gap: 30px;
+      padding: 0 20px;
     }
 
     .tile-selection {
       display: flex;
-      justify-content: space-around;
+      flex-direction: column;
       gap: 10px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
+      flex-shrink: 0;
     }
 
     .tile {
@@ -80,7 +73,6 @@
       padding: 20px;
       cursor: pointer;
       text-align: center;
-      flex: 1;
       transition: background-color 0.3s, border-color 0.3s;
       min-width: 120px;
     }
@@ -95,8 +87,15 @@
       color: white;
     }
 
-    .form-section {
-      margin-bottom: 15px;
+    .calculator-wrapper {
+      flex-grow: 1;
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      display: none;
     }
 
     label {
@@ -114,6 +113,19 @@
       margin: 5px 0;
       border: 1px solid #ccc;
       border-radius: 4px;
+    }
+
+    .image-container {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .image-container img {
+      max-width: 80%;
+      height: auto;
+      margin: 10px 0;
+      max-height: 200px;
+      object-fit: contain;
     }
 
     .result {
@@ -134,32 +146,7 @@
       color: #90181c;
     }
 
-    .image-container {
-      text-align: center;
-      margin-top: 10px;
-    }
-
-    .image-container img {
-      max-width: 80%;
-      height: auto;
-      margin: 10px 0;
-      max-height: 200px;
-      object-fit: contain;
-    }
-
-    #tube-form .image-container img {
-      max-width: 100%;
-      max-height: 250px;
-      display: block;
-      margin: 0 auto;
-      transform: translateX(-10px);
-    }
-
-    #custom-density-container {
-      display: none;
-    }
-
-   .toggle-alternatives {
+    .toggle-alternatives {
       background-color: #164183;
       border: none;
       color: white;
@@ -222,11 +209,6 @@
   </header>
 
   <div class="container">
-    <div class="intro">
-      <p>Vyberte typ polotovaru, pro který chcete vypočítat hmotnost:</p>
-    </div>
-
-<!-- Výběr polotovaru-->
     <div class="tile-selection">
       <div class="tile" id="tile-rod" onclick="selectType('rod')">Tyč</div>
       <div class="tile" id="tile-tube" onclick="selectType('tube')">Trubka</div>
@@ -237,96 +219,91 @@
       <div class="tile" id="tile-h" onclick="selectType('h')">H profil</div>
     </div>
 
-<!-- Výběr materiálu-->    
-    <div class="form-section" id="material-selection" style="display:none;">
-      <label for="material">Materiál:</label>
-      <select id="material">
-        <option value="7850">Uhlíková ocel (7850 kg/m³)</option>
-        <option value="7900">Nerezová ocel (7900 kg/m³)</option>
-        <option value="2700">Hliník (2700 kg/m³)</option>
-        <option value="1200">Plast (1200 kg/m³)</option>
-        <option value="custom">Vlastní</option>
-      </select>
-    </div>
-
-<!-- Vlastní hustota-->
-    <div id="custom-density-container" class="form-section">
-      <label for="custom-density">Zadejte vlastní hustotu (kg/m³):</label>
-      <input type="number" id="custom-density" placeholder="Hustota v kg/m³" />
-    </div>
-
-<!-- Zadání rozměrů pro TYČ-->    
-    <div class="form-section" id="rod-form" style="display: none;">
-      <label for="diameter">Průměr tyče d (mm):</label>
-      <input type="number" id="diameter" placeholder="Průměr v mm" />
-      <label for="length">Délka tyče (mm):</label>
-      <input type="number" id="length" placeholder="Délka v mm" />
-      <div class="image-container">
-        <img src="images/rod_image.jpg" alt="Obrázek tyče" />
+    <div class="calculator-wrapper" id="calculator-wrapper">
+      <div class="form-section" id="material-selection" style="display:none;">
+        <label for="material">Materiál:</label>
+        <select id="material">
+          <option value="7850">Uhlíková ocel (7850 kg/m³)</option>
+          <option value="7900">Nerezová ocel (7900 kg/m³)</option>
+          <option value="2700">Hliník (2700 kg/m³)</option>
+          <option value="1200">Plast (1200 kg/m³)</option>
+          <option value="custom">Vlastní</option>
+        </select>
       </div>
-    </div>
 
-<!-- Zadání rozměrů pro TRUBKU-->     
-    <div class="form-section" id="tube-form" style="display: none;">
-  <label for="tube-input-type">Způsob zadání trubky:</label>
-  <select id="tube-input-type" onchange="toggleTubeInputs()">
-    <option value="outer-thickness">Vnější průměr + tloušťka stěny</option>
-    <option value="outer-inner">Vnější průměr + vnitřní průměr</option>
-  </select>
-
-  <div id="tube-outer-thickness">
-    <label for="outer-diameter">Vnější průměr trubky D (mm):</label>
-    <input type="number" id="outer-diameter" placeholder="Vnější průměr v mm" />
-    <label for="wall-thickness">Tloušťka stěny t (mm):</label>
-    <input type="number" id="wall-thickness" placeholder="Tloušťka stěny v mm" />
-  </div>
-
-  <div id="tube-outer-inner" style="display: none;">
-    <label for="outer-diameter-2">Vnější průměr trubky D (mm):</label>
-    <input type="number" id="outer-diameter-2" placeholder="Vnější průměr v mm" />
-    <label for="inner-diameter">Vnitřní průměr trubky d (mm):</label>
-    <input type="number" id="inner-diameter" placeholder="Vnitřní průměr v mm" />
-  </div>
-
-  <label for="length-tube">Délka trubky (mm):</label>
-  <input type="number" id="length-tube" placeholder="Délka trubky v mm" />
-
-  <div class="image-container">
-    <img src="images/tube_image.jpg" alt="Obrázek trubky" />
-  </div>
-</div>
-
-<!-- Zadání rozměrů pro PLECH-->      
-    <div class="form-section" id="sheet-form" style="display: none;">
-      <label for="width">Šířka plechu b (mm):</label>
-      <input type="number" id="width" placeholder="Šířka plechu v mm" />
-      <label for="thickness">Tloušťka plechu t (mm):</label>
-      <input type="number" id="thickness" placeholder="Tloušťka plechu v mm" />
-      <label for="height">Délka plechu (mm):</label>
-      <input type="number" id="height" placeholder="Délka plechu v mm" />
-      <div class="image-container">
-        <img src="images/sheet_image.jpg" alt="Obrázek plechu" />
+      <div id="custom-density-container" class="form-section" style="display:none;">
+        <label for="custom-density">Zadejte vlastní hustotu (kg/m³):</label>
+        <input type="number" id="custom-density" placeholder="Hustota v kg/m³" />
       </div>
-    </div>
 
-    <!-- Formulář pro L profil -->
-    <div class="form-section" id="l-form" style="display: none;">
-      <label for="l-type">Typ L profilu:</label>
-      <select id="l-type">
-        <option value="equal">Rovnoramenný</option>
-        <option value="unequal">Nerovnoramenný</option>
-      </select>
-    </div>
+      <div class="form-section" id="rod-form" style="display: none;">
+        <label for="diameter">Průměr tyče d (mm):</label>
+        <input type="number" id="diameter" placeholder="Průměr v mm" />
+        <label for="length">Délka tyče (mm):</label>
+        <input type="number" id="length" placeholder="Délka v mm" />
+        <div class="image-container">
+          <img src="images/rod_image.jpg" alt="Obrázek tyče" />
+        </div>
+      </div>
 
-<!-- Zobrazení HMOTNOSTI-->       
-   <div class="result" id="result">
-      Hmotnost: <span id="weight">0</span> kg
-      <span class="copy-icon" onclick="copyWeight()" title="Zkopírovat">📋</span>
-    </div>
+      <div class="form-section" id="tube-form" style="display: none;">
+        <label for="tube-input-type">Způsob zadání trubky:</label>
+        <select id="tube-input-type" onchange="toggleTubeInputs()">
+          <option value="outer-thickness">Vnější průměr + tloušťka stěny</option>
+          <option value="outer-inner">Vnější průměr + vnitřní průměr</option>
+        </select>
 
-    <button class="reset-button" id="reset-button" onclick="resetInputs()">Vymazat hodnoty</button>
-    <button class="toggle-alternatives" onclick="toggleAlternatives()">Zobrazit hmotnosti pro jiné materiály</button>
-    <div id="alternative-weights" class="alternative-weights"></div>
+        <div id="tube-outer-thickness">
+          <label for="outer-diameter">Vnější průměr trubky D (mm):</label>
+          <input type="number" id="outer-diameter" placeholder="Vnější průměr v mm" />
+          <label for="wall-thickness">Tloušťka stěny t (mm):</label>
+          <input type="number" id="wall-thickness" placeholder="Tloušťka stěny v mm" />
+        </div>
+
+        <div id="tube-outer-inner" style="display: none;">
+          <label for="outer-diameter-2">Vnější průměr trubky D (mm):</label>
+          <input type="number" id="outer-diameter-2" placeholder="Vnější průměr v mm" />
+          <label for="inner-diameter">Vnitřní průměr trubky d (mm):</label>
+          <input type="number" id="inner-diameter" placeholder="Vnitřní průměr v mm" />
+        </div>
+
+        <label for="length-tube">Délka trubky (mm):</label>
+        <input type="number" id="length-tube" placeholder="Délka trubky v mm" />
+
+        <div class="image-container">
+          <img src="images/tube_image.jpg" alt="Obrázek trubky" />
+        </div>
+      </div>
+
+      <div class="form-section" id="sheet-form" style="display: none;">
+        <label for="width">Šířka plechu b (mm):</label>
+        <input type="number" id="width" placeholder="Šířka plechu v mm" />
+        <label for="thickness">Tloušťka plechu t (mm):</label>
+        <input type="number" id="thickness" placeholder="Tloušťka plechu v mm" />
+        <label for="height">Délka plechu (mm):</label>
+        <input type="number" id="height" placeholder="Délka plechu v mm" />
+        <div class="image-container">
+          <img src="images/sheet_image.jpg" alt="Obrázek plechu" />
+        </div>
+      </div>
+
+      <div class="form-section" id="l-form" style="display: none;">
+        <label for="l-type">Typ L profilu:</label>
+        <select id="l-type">
+          <option value="equal">Rovnoramenný</option>
+          <option value="unequal">Nerovnoramenný</option>
+        </select>
+      </div>
+
+      <div class="result" id="result">
+        Hmotnost: <span id="weight">0</span> kg
+        <span class="copy-icon" onclick="copyWeight()" title="Zkopírovat">📋</span>
+      </div>
+
+      <button class="reset-button" id="reset-button" onclick="resetInputs()">Vymazat hodnoty</button>
+      <button class="toggle-alternatives" onclick="toggleAlternatives()">Zobrazit hmotnosti pro jiné materiály</button>
+      <div id="alternative-weights" class="alternative-weights"></div>
+    </div>
   </div>
 
   <script>
