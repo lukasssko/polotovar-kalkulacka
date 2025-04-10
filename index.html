@@ -338,6 +338,9 @@
 
   selectedType = type;
 
+  // 👉 ZDE je přidaný řádek
+  document.getElementById('calculator-wrapper').style.display = 'block';
+
   allTypes.forEach(id => {
     const el = document.getElementById(`tile-${id}`);
     if (el) el.classList.toggle('active', id === type);
@@ -357,6 +360,7 @@
 
   calculateWeight();
 }
+
 
 
     function hideAllForms() {
