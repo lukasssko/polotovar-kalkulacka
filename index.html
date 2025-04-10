@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -227,7 +226,6 @@
       <p>Vyberte typ polotovaru, pro který chcete vypočítat hmotnost:</p>
     </div>
 
-<!-- Výběr polotovaru -->
     <div class="tile-selection">
       <div class="tile" id="tile-rod" onclick="selectType('rod')">Tyč</div>
       <div class="tile" id="tile-tube" onclick="selectType('tube')">Trubka</div>
@@ -238,7 +236,6 @@
       <div class="tile" id="tile-h" onclick="selectType('h')">H profil</div>
     </div>
 
-<!-- Výběr materiálu-->
     <div class="form-section" id="material-selection" style="display:none;">
       <label for="material">Materiál:</label>
       <select id="material">
@@ -250,13 +247,11 @@
       </select>
     </div>
 
- <!-- Vlastní materiál-->   
     <div id="custom-density-container" class="form-section">
       <label for="custom-density">Zadejte vlastní hustotu (kg/m³):</label>
       <input type="number" id="custom-density" placeholder="Hustota v kg/m³" />
     </div>
 
- <!-- Zadání rozměrů pro TYČ-->   
     <div class="form-section" id="rod-form" style="display: none;">
       <label for="diameter">Průměr tyče d (mm):</label>
       <input type="number" id="diameter" placeholder="Průměr v mm" />
@@ -267,7 +262,6 @@
       </div>
     </div>
 
-<!-- Zadání rozměrů pro TRUBKU-->     
     <div class="form-section" id="tube-form" style="display: none;">
   <label for="tube-input-type">Způsob zadání trubky:</label>
   <select id="tube-input-type" onchange="toggleTubeInputs()">
@@ -275,7 +269,6 @@
     <option value="outer-inner">Vnější průměr + vnitřní průměr</option>
   </select>
 
-<!-- TRUBKA varianta vnější průměr a tloušťka stěny-->       
   <div id="tube-outer-thickness">
     <label for="outer-diameter">Vnější průměr trubky D (mm):</label>
     <input type="number" id="outer-diameter" placeholder="Vnější průměr v mm" />
@@ -283,7 +276,6 @@
     <input type="number" id="wall-thickness" placeholder="Tloušťka stěny v mm" />
   </div>
 
-<!-- TRUBKA varianta vnější průměr a vnitřní průměr-->      
   <div id="tube-outer-inner" style="display: none;">
     <label for="outer-diameter-2">Vnější průměr trubky D (mm):</label>
     <input type="number" id="outer-diameter-2" placeholder="Vnější průměr v mm" />
@@ -299,7 +291,6 @@
   </div>
 </div>
 
-<!-- Zadání rozměrů pro PLECH-->
     <div class="form-section" id="sheet-form" style="display: none;">
       <label for="width">Šířka plechu b (mm):</label>
       <input type="number" id="width" placeholder="Šířka plechu v mm" />
@@ -312,40 +303,6 @@
       </div>
     </div>
 
-<!-- Formulář pro L profil -->
-    div class="form-section" id="l-form" style="display: none;">
-      <label for="l-type">Typ L profilu:</label>
-      <select id="l-type" onchange="toggleLTypeInputs()">
-        <option value="equal">Rovnoramenný</option>
-        <option value="unequal">Nerovnoramenný</option>
-      </select>
-
-      <div id="l-profile-select-container">
-        <label for="l-profile-select">Vyberte typ L profilu:</label>
-        <select id="l-profile-select" onchange="loadLProfileData()">
-          <option value="">-- vyberte --</option>
-        </select>
-      </div>
-
-      <div id="l-inputs">
-        <label for="l-side-a">Rameno A (mm):</label>
-        <input type="number" id="l-side-a" placeholder="Délka ramene A v mm">
-
-        <div id="l-side-b-container" style="display: none;">
-          <label for="l-side-b">Rameno B (mm):</label>
-          <input type="number" id="l-side-b" placeholder="Délka ramene B v mm">
-        </div>
-
-        <label for="l-thickness">Tloušťka (mm):</label>
-        <input type="number" id="l-thickness" placeholder="Tloušťka v mm">
-
-        <label for="l-length">Délka profilu (mm):</label>
-        <input type="number" id="l-length" placeholder="Délka v mm">
-      </div>
-    </div>
-  </div>   
-
-<!-- Zobrazení hmotnosti-->    
    <div class="result" id="result">
       Hmotnost: <span id="weight">0</span> kg
       <span class="copy-icon" onclick="copyWeight()" title="Zkopírovat">📋</span>
@@ -358,8 +315,6 @@
 
   <script>
     let selectedType = null;
-    let lProfilesEqual = [];
-    let lProfilesUnequal = [];
 
     const densities = {
       7850: "Uhlíková ocel",
@@ -371,20 +326,14 @@
     function mmToMeters(mm) {
       return mm / 1000;
     }
-// Funkce pro zpracování výběru typu profilu (dlaždice)
+
     function selectType(type) {
-// Objekt obsahující odkazy na HTML prvky pro jednotlivé typy profilu
       const tileElements = {
         rod: document.getElementById('tile-rod'),
         tube: document.getElementById('tile-tube'),
         sheet: document.getElementById('tile-sheet')
-        l: document.getElementById('tile-l'),
-        u: document.getElementById('tile-u'),
-        i: document.getElementById('tile-i'),
-        h: document.getElementById('tile-h')
       };
 
-// Pokud kliknu znovu na aktivní dlaždici, deaktivuje se
       if (selectedType === type) {
         selectedType = null;
         Object.values(tileElements).forEach(el => el.classList.remove('active'));
@@ -392,22 +341,19 @@
         return;
       }
 
-// Nastavení aktuálně zvoleného typu a aktualizace vzhledu dlaždic
       selectedType = type;
       Object.entries(tileElements).forEach(([key, el]) => {
         el.classList.toggle('active', key === type);
       });
-// Zobrazí společné prvky (formuláře, výsledek)
+
       document.getElementById('material-selection').style.display = 'block';
       document.getElementById('result').style.display = 'flex';
       document.querySelector('.toggle-alternatives').style.display = 'block';
       document.getElementById('reset-button').style.display = 'block';
-// Zobrazí odpovídající formulář podle zvoleného typu
+
       document.getElementById('rod-form').style.display = type === 'rod' ? 'block' : 'none';
       document.getElementById('tube-form').style.display = type === 'tube' ? 'block' : 'none';
       document.getElementById('sheet-form').style.display = type === 'sheet' ? 'block' : 'none';
-      document.getElementById('l-form')?.style?.setProperty('display', type === 'l' ? 'block' : 'none');
-
 
       calculateWeight();
     }
@@ -429,66 +375,6 @@
     document.getElementById('tube-outer-inner').style.display = type === 'outer-inner' ? 'block' : 'none';
     calculateWeight();
   }
-
-    function toggleLTypeInputs() {
-      const type = document.getElementById('l-type').value;
-      const bContainer = document.getElementById('l-side-b-container');
-      bContainer.style.display = type === 'unequal' ? 'block' : 'none';
-
-      const select = document.getElementById('l-profile-select');
-      select.innerHTML = '<option value="">-- vyberte --</option>';
-      const profiles = type === 'equal' ? lProfilesEqual : lProfilesUnequal;
-      profiles.forEach((profile, index) => {
-        const opt = document.createElement('option');
-        opt.value = index;
-        opt.textContent = profile.typ;
-        select.appendChild(opt);
-      });
-    }
-
-    async function fetchLProfiles() {
-      const resEqual = await fetch('polotovar-kalkulacka/datasheets/l_isosceles_datasheet.csv');
-      const textEqual = await resEqual.text();
-      lProfilesEqual = parseCSV(textEqual);
-
-      const resUnequal = await fetch('polotovar-kalkulacka/datasheets/l_unequal_datasheet.csv');
-      const textUnequal = await resUnequal.text();
-      lProfilesUnequal = parseCSV(textUnequal);
-
-      toggleLTypeInputs(); // Načte první sadu při načtení stránky
-    }
-
-    function parseCSV(text) {
-      const lines = text.trim().split('\n');
-      const headers = lines[0].split(';');
-      return lines.slice(1).map(line => {
-        const cols = line.split(';');
-        const obj = {};
-        headers.forEach((key, i) => {
-          obj[key.trim()] = isNaN(cols[i]) ? cols[i].trim() : parseFloat(cols[i]);
-        });
-        return {
-          typ: obj.Označení,
-          a: obj.a,
-          b: obj.b || obj.a,
-          t: obj.t
-        };
-      });
-    }
-
-    function loadLProfileData() {
-      const type = document.getElementById('l-type').value;
-      const index = document.getElementById('l-profile-select').value;
-      if (index === '') return;
-      const profile = (type === 'equal' ? lProfilesEqual : lProfilesUnequal)[index];
-      document.getElementById('l-side-a').value = profile.a;
-      document.getElementById('l-side-b').value = profile.b;
-      document.getElementById('l-thickness').value = profile.t;
-      document.getElementById('l-type').value = type;
-      toggleLTypeInputs();
-    }
-
-    window.addEventListener('DOMContentLoaded', fetchLProfiles);
 
     function getVolume() {
     if (document.getElementById('rod-form').style.display === 'block') {
