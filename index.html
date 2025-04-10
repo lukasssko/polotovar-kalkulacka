@@ -482,18 +482,26 @@
     });
 
     function resetInputs() {
-      const formId = selectedType === 'rod' ? 'rod-form'
-                    : selectedType === 'tube' ? 'tube-form'
-                    : selectedType === 'sheet' ? 'sheet-form'
-                    : null;
-      if (!formId) return;
+  const formId = ['rod-form', 'tube-form', 'sheet-form'].find(id => {
+    return document.getElementById(id) && document.getElementById(id).style.display === 'block';
+  });
+  if (!formId) return;
 
-      const inputs = document.querySelectorAll(`#${formId} input`);
-      inputs.forEach(input => input.value = '');
+  const inputs = document.querySelectorAll(`#${formId} input`);
+  inputs.forEach(input => {
+    input.value = '';
+    input.classList.remove('valid');
+  });
 
-      document.getElementById('custom-density').value = '';
-      calculateWeight();
-    }
+  document.getElementById('custom-density').value = '';
+
+  // Aktualizace alternativních hmotností – ale zůstane viditelný
+  const altContainer = document.getElementById('alternative-weights');
+  altContainer.innerHTML = '<em>Nejprve zadejte rozměry pro výpočet.</em>';
+  altContainer.style.display = 'block';
+
+  calculateWeight();
+}
 
     // Přidání odebrání .valid i při mazání tlačítkem "Vymazat hodnoty"
     function resetInputs() {
