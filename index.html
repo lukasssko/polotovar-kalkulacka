@@ -226,6 +226,7 @@
       <p>Vyberte typ polotovaru, pro který chcete vypočítat hmotnost:</p>
     </div>
 
+<!-- Výběr polotovaru-->
     <div class="tile-selection">
       <div class="tile" id="tile-rod" onclick="selectType('rod')">Tyč</div>
       <div class="tile" id="tile-tube" onclick="selectType('tube')">Trubka</div>
@@ -236,6 +237,7 @@
       <div class="tile" id="tile-h" onclick="selectType('h')">H profil</div>
     </div>
 
+<!-- Výběr materiálu-->    
     <div class="form-section" id="material-selection" style="display:none;">
       <label for="material">Materiál:</label>
       <select id="material">
@@ -247,11 +249,13 @@
       </select>
     </div>
 
+<!-- Vlastní hustota-->
     <div id="custom-density-container" class="form-section">
       <label for="custom-density">Zadejte vlastní hustotu (kg/m³):</label>
       <input type="number" id="custom-density" placeholder="Hustota v kg/m³" />
     </div>
 
+<!-- Zadání rozměrů pro TYČ-->    
     <div class="form-section" id="rod-form" style="display: none;">
       <label for="diameter">Průměr tyče d (mm):</label>
       <input type="number" id="diameter" placeholder="Průměr v mm" />
@@ -262,6 +266,7 @@
       </div>
     </div>
 
+<!-- Zadání rozměrů pro TRUBKU-->     
     <div class="form-section" id="tube-form" style="display: none;">
   <label for="tube-input-type">Způsob zadání trubky:</label>
   <select id="tube-input-type" onchange="toggleTubeInputs()">
@@ -291,6 +296,7 @@
   </div>
 </div>
 
+<!-- Zadání rozměrů pro PLECH-->      
     <div class="form-section" id="sheet-form" style="display: none;">
       <label for="width">Šířka plechu b (mm):</label>
       <input type="number" id="width" placeholder="Šířka plechu v mm" />
@@ -303,6 +309,16 @@
       </div>
     </div>
 
+    <!-- Formulář pro L profil -->
+    <div class="form-section" id="l-form" style="display: none;">
+      <label for="l-type">Typ L profilu:</label>
+      <select id="l-type">
+        <option value="equal">Rovnoramenný</option>
+        <option value="unequal">Nerovnoramenný</option>
+      </select>
+    </div>
+
+<!-- Zobrazení HMOTNOSTI-->       
    <div class="result" id="result">
       Hmotnost: <span id="weight">0</span> kg
       <span class="copy-icon" onclick="copyWeight()" title="Zkopírovat">📋</span>
@@ -331,7 +347,8 @@
       const tileElements = {
         rod: document.getElementById('tile-rod'),
         tube: document.getElementById('tile-tube'),
-        sheet: document.getElementById('tile-sheet')
+        sheet: document.getElementById('tile-sheet'),
+        l: document.getElementById('tile-l')
       };
 
       if (selectedType === type) {
@@ -354,6 +371,7 @@
       document.getElementById('rod-form').style.display = type === 'rod' ? 'block' : 'none';
       document.getElementById('tube-form').style.display = type === 'tube' ? 'block' : 'none';
       document.getElementById('sheet-form').style.display = type === 'sheet' ? 'block' : 'none';
+      document.getElementById('l-form').style.display = type === 'l' ? 'block' : 'none';
 
       calculateWeight();
     }
