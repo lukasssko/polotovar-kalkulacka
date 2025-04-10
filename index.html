@@ -344,37 +344,40 @@
     }
 
     function selectType(type) {
-      const tileElements = {
-        rod: document.getElementById('tile-rod'),
-        tube: document.getElementById('tile-tube'),
-        sheet: document.getElementById('tile-sheet'),
-        l: document.getElementById('tile-l')
-      };
+  const allTypes = ['rod', 'tube', 'sheet', 'l', 'u', 'i', 'h'];
 
-      if (selectedType === type) {
-        selectedType = null;
-        Object.values(tileElements).forEach(el => el.classList.remove('active'));
-        hideAllForms();
-        return;
-      }
+  // Pokud kliknu na již aktivní, deaktivuj
+  if (selectedType === type) {
+    selectedType = null;
+    allTypes.forEach(id => {
+      const el = document.getElementById(`tile-${id}`);
+      if (el) el.classList.remove('active');
+    });
+    hideAllForms();
+    return;
+  }
 
-      selectedType = type;
-      Object.entries(tileElements).forEach(([key, el]) => {
-        el.classList.toggle('active', key === type);
-      });
+  selectedType = type;
 
-      document.getElementById('material-selection').style.display = 'block';
-      document.getElementById('result').style.display = 'flex';
-      document.querySelector('.toggle-alternatives').style.display = 'block';
-      document.getElementById('reset-button').style.display = 'block';
+  allTypes.forEach(id => {
+    const el = document.getElementById(`tile-${id}`);
+    if (el) el.classList.toggle('active', id === type);
+  });
 
-      document.getElementById('rod-form').style.display = type === 'rod' ? 'block' : 'none';
-      document.getElementById('tube-form').style.display = type === 'tube' ? 'block' : 'none';
-      document.getElementById('sheet-form').style.display = type === 'sheet' ? 'block' : 'none';
-      document.getElementById('l-form').style.display = type === 'l' ? 'block' : 'none';
+  document.getElementById('material-selection').style.display = 'block';
+  document.getElementById('result').style.display = 'flex';
+  document.querySelector('.toggle-alternatives').style.display = 'block';
+  document.getElementById('reset-button').style.display = 'block';
 
-      calculateWeight();
-    }
+  hideAllForms(); // nejdřív vše schovej
+  if (type === 'rod') document.getElementById('rod-form').style.display = 'block';
+  if (type === 'tube') document.getElementById('tube-form').style.display = 'block';
+  if (type === 'sheet') document.getElementById('sheet-form').style.display = 'block';
+  if (type === 'l') document.getElementById('l-form').style.display = 'block';
+
+  calculateWeight();
+}
+
 
     function hideAllForms() {
   const allForms = ['rod-form', 'tube-form', 'sheet-form', 'l-form'];
