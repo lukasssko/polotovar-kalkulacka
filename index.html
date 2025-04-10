@@ -503,13 +503,14 @@
   });
 
   document.getElementById('custom-density').value = '';
+  document.getElementById('custom-density').classList.remove('valid');
 
-  // Aktualizace alternativních hmotností – zůstane viditelný
   const altContainer = document.getElementById('alternative-weights');
   altContainer.innerHTML = '<em>Nejprve zadejte rozměry pro výpočet.</em>';
   altContainer.style.display = 'block';
 
   calculateWeight();
+  validateInputs(); // <- Přidáno: aktualizace validace polí
 }
 
     function validateInputs() {
