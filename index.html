@@ -482,7 +482,7 @@
     });
 
     function resetInputs() {
-  const formId = ['rod-form', 'tube-form', 'sheet-form'].find(id => {
+  const formId = ['rod-form', 'tube-form', 'sheet-form', 'l-form'].find(id => {
     return document.getElementById(id) && document.getElementById(id).style.display === 'block';
   });
   if (!formId) return;
@@ -495,13 +495,14 @@
 
   document.getElementById('custom-density').value = '';
 
-  // Aktualizace alternativních hmotností – ale zůstane viditelný
+  // Aktualizace alternativních hmotností – zůstane viditelný
   const altContainer = document.getElementById('alternative-weights');
   altContainer.innerHTML = '<em>Nejprve zadejte rozměry pro výpočet.</em>';
   altContainer.style.display = 'block';
 
   calculateWeight();
 }
+
 
     // Přidání odebrání .valid i při mazání tlačítkem "Vymazat hodnoty"
     function resetInputs() {
