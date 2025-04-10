@@ -346,14 +346,16 @@
     function selectType(type) {
   const allTypes = ['rod', 'tube', 'sheet', 'l', 'u', 'i', 'h'];
 
-  // Pokud kliknu na již aktivní, deaktivuj
+  // Vždy nejdřív vše schovej
+  hideAllForms();
+
+  // Pokud kliknu na již aktivní typ, jen deaktivuj a skonči
   if (selectedType === type) {
     selectedType = null;
     allTypes.forEach(id => {
       const el = document.getElementById(`tile-${id}`);
       if (el) el.classList.remove('active');
     });
-    hideAllForms();
     return;
   }
 
@@ -364,12 +366,13 @@
     if (el) el.classList.toggle('active', id === type);
   });
 
+  // Zobrazit společné sekce
   document.getElementById('material-selection').style.display = 'block';
   document.getElementById('result').style.display = 'flex';
   document.querySelector('.toggle-alternatives').style.display = 'block';
   document.getElementById('reset-button').style.display = 'block';
 
-  hideAllForms(); // nejdřív vše schovej
+  // Zobrazit konkrétní formulář
   if (type === 'rod') document.getElementById('rod-form').style.display = 'block';
   if (type === 'tube') document.getElementById('tube-form').style.display = 'block';
   if (type === 'sheet') document.getElementById('sheet-form').style.display = 'block';
