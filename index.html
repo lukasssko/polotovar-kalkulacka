@@ -227,14 +227,14 @@
       <p>Vyberte typ polotovaru, pro který chcete vypočítat hmotnost:</p>
     </div>
 
-//Volba polotovaru//
+<!--Volba polotovaru//
     <div class="tile-selection">
       <div class="tile" id="tile-rod" onclick="selectType('rod')">Tyč</div>
       <div class="tile" id="tile-tube" onclick="selectType('tube')">Trubka</div>
       <div class="tile" id="tile-sheet" onclick="selectType('sheet')">Plech</div>
     </div>
 
-//Volba materiálu a nebo zadání//
+<!--Volba materiálu a nebo zadání//
     <div class="form-section" id="material-selection" style="display:none;">
       <label for="material">Materiál:</label>
       <select id="material">
@@ -251,8 +251,8 @@
       <input type="number" id="custom-density" placeholder="Hustota v kg/m³" />
     </div>
 
-//Formuláře pro jednotlivé tvary: tyč, trubka, plech//   
-//Formulář pro tyč// 
+<!--Formuláře pro jednotlivé tvary: tyč, trubka, plech//   
+<!--Formulář pro tyč// 
     <div class="form-section" id="rod-form" style="display: none;">
       <label for="diameter">Průměr tyče d (mm):</label>
       <input type="number" id="diameter" placeholder="Průměr v mm" />
@@ -263,7 +263,7 @@
       </div>
     </div>
 
-//Formulář pro trubku//
+<!--Formulář pro trubku//
     <div class="form-section" id="tube-form" style="display: none;">
       <label for="tube-input-type">Způsob zadání trubky:</label>
       <select id="tube-input-type" onchange="toggleTubeInputs()">
@@ -271,7 +271,7 @@
       <option value="outer-inner">Vnější průměr + vnitřní průměr</option>
   </select>
 
-//Formulář pro trubku vnější průměr + tloušťka//
+<!--Formulář pro trubku vnější průměr + tloušťka//
   <div id="tube-outer-thickness">
     <label for="outer-diameter">Vnější průměr trubky D (mm):</label>
     <input type="number" id="outer-diameter" placeholder="Vnější průměr v mm" />
@@ -279,7 +279,7 @@
     <input type="number" id="wall-thickness" placeholder="Tloušťka stěny v mm" />
   </div>
 
-//Formulář pro trubku vnější průměr + vniřní průměr//      
+<!--Formulář pro trubku vnější průměr + vniřní průměr//      
   <div id="tube-outer-inner" style="display: none;">
     <label for="outer-diameter-2">Vnější průměr trubky D (mm):</label>
     <input type="number" id="outer-diameter-2" placeholder="Vnější průměr v mm" />
@@ -295,7 +295,7 @@
   </div>
 </div>
 
-//Formulář pro plech//
+<!--Formulář pro plech//
     <div class="form-section" id="sheet-form" style="display: none;">
       <label for="width">Šířka plechu b (mm):</label>
       <input type="number" id="width" placeholder="Šířka plechu v mm" />
@@ -309,13 +309,13 @@
     </div>
 
 
-///Zobrazení výsledků a kopírovací ikona -->
+<!--Zobrazení výsledků a kopírovací ikona -->
    <div class="result" id="result">
       Hmotnost: <span id="weight">0</span> kg
       <span class="copy-icon" onclick="copyWeight()" title="Zkopírovat">📋</span>
     </div>
 
-//Další ovládací prvky//
+<!--Další ovládací prvky//
     <button class="reset-button" id="reset-button" onclick="resetInputs()">Vymazat hodnoty</button>
     <button class="toggle-alternatives" onclick="toggleAlternatives()">Zobrazit hmotnosti pro jiné materiály</button>
     <div id="alternative-weights" class="alternative-weights"></div>
