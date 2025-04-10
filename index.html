@@ -212,6 +212,7 @@
       background-color: #c4341e;
     }
   </style>
+
 </head>
 <body>
   <header>
@@ -226,12 +227,14 @@
       <p>Vyberte typ polotovaru, pro který chcete vypočítat hmotnost:</p>
     </div>
 
+//Volba polotovaru//
     <div class="tile-selection">
       <div class="tile" id="tile-rod" onclick="selectType('rod')">Tyč</div>
       <div class="tile" id="tile-tube" onclick="selectType('tube')">Trubka</div>
       <div class="tile" id="tile-sheet" onclick="selectType('sheet')">Plech</div>
     </div>
 
+//Volba materiálu a nebo zadání//
     <div class="form-section" id="material-selection" style="display:none;">
       <label for="material">Materiál:</label>
       <select id="material">
@@ -242,12 +245,14 @@
         <option value="custom">Vlastní</option>
       </select>
     </div>
-
+  
     <div id="custom-density-container" class="form-section">
       <label for="custom-density">Zadejte vlastní hustotu (kg/m³):</label>
       <input type="number" id="custom-density" placeholder="Hustota v kg/m³" />
     </div>
 
+//Formuláře pro jednotlivé tvary: tyč, trubka, plech//   
+//Formulář pro tyč// 
     <div class="form-section" id="rod-form" style="display: none;">
       <label for="diameter">Průměr tyče d (mm):</label>
       <input type="number" id="diameter" placeholder="Průměr v mm" />
@@ -258,13 +263,15 @@
       </div>
     </div>
 
+//Formulář pro trubku//
     <div class="form-section" id="tube-form" style="display: none;">
-  <label for="tube-input-type">Způsob zadání trubky:</label>
-  <select id="tube-input-type" onchange="toggleTubeInputs()">
-    <option value="outer-thickness">Vnější průměr + tloušťka stěny</option>
-    <option value="outer-inner">Vnější průměr + vnitřní průměr</option>
+      <label for="tube-input-type">Způsob zadání trubky:</label>
+      <select id="tube-input-type" onchange="toggleTubeInputs()">
+      <option value="outer-thickness">Vnější průměr + tloušťka stěny</option>
+      <option value="outer-inner">Vnější průměr + vnitřní průměr</option>
   </select>
 
+//Formulář pro trubku vnější průměr + tloušťka//
   <div id="tube-outer-thickness">
     <label for="outer-diameter">Vnější průměr trubky D (mm):</label>
     <input type="number" id="outer-diameter" placeholder="Vnější průměr v mm" />
@@ -272,6 +279,7 @@
     <input type="number" id="wall-thickness" placeholder="Tloušťka stěny v mm" />
   </div>
 
+//Formulář pro trubku vnější průměr + vniřní průměr//      
   <div id="tube-outer-inner" style="display: none;">
     <label for="outer-diameter-2">Vnější průměr trubky D (mm):</label>
     <input type="number" id="outer-diameter-2" placeholder="Vnější průměr v mm" />
@@ -287,6 +295,7 @@
   </div>
 </div>
 
+//Formulář pro plech//
     <div class="form-section" id="sheet-form" style="display: none;">
       <label for="width">Šířka plechu b (mm):</label>
       <input type="number" id="width" placeholder="Šířka plechu v mm" />
@@ -299,16 +308,21 @@
       </div>
     </div>
 
+
+///Zobrazení výsledků a kopírovací ikona -->
    <div class="result" id="result">
       Hmotnost: <span id="weight">0</span> kg
       <span class="copy-icon" onclick="copyWeight()" title="Zkopírovat">📋</span>
     </div>
 
+//Další ovládací prvky//
     <button class="reset-button" id="reset-button" onclick="resetInputs()">Vymazat hodnoty</button>
     <button class="toggle-alternatives" onclick="toggleAlternatives()">Zobrazit hmotnosti pro jiné materiály</button>
     <div id="alternative-weights" class="alternative-weights"></div>
   </div>
 
+
+  
   <script>
     let selectedType = null;
 
@@ -323,6 +337,7 @@
       return mm / 1000;
     }
 
+// Funkce pro volbu tvaru polotovaru  
     function selectType(type) {
       const tileElements = {
         rod: document.getElementById('tile-rod'),
@@ -365,6 +380,7 @@
       document.getElementById('alternative-weights').style.display = 'none';
     }
 
+//Umožňuje zvolit mezi dvěma způsoby zadání trubky//
     function toggleTubeInputs() {
     const type = document.getElementById('tube-input-type').value;
     document.getElementById('tube-outer-thickness').style.display = type === 'outer-thickness' ? 'block' : 'none';
@@ -372,6 +388,7 @@
     calculateWeight();
   }
 
+//Vypočítá objem zadaného tvaru podle zvoleného formuláře//
     function getVolume() {
     if (document.getElementById('rod-form').style.display === 'block') {
       const d = mmToMeters(parseFloat(document.getElementById('diameter').value));
@@ -404,6 +421,8 @@
     return 0;
   }
 
+
+//Vypočítá hmotnost podle objemu a hustoty//
     function calculateWeight() {
       const volume = getVolume();
       let densityInput = document.getElementById('material').value;
@@ -413,6 +432,7 @@
       updateAlternativeWeights(volume);
     }
 
+//Zobrazí hmotnosti téhož objemu pro jiné materiály (ocel, hliník, plast…)//
     function updateAlternativeWeights(volume) {
       const container = document.getElementById('alternative-weights');
       if (volume <= 0 || isNaN(volume)) {
@@ -433,6 +453,8 @@
       div.style.display = div.style.display === 'none' || div.style.display === '' ? 'block' : 'none';
     }
 
+
+//Zkopíruje hmotnost do schránky//
     function copyWeight() {
       const weight = document.getElementById('weight').textContent;
       navigator.clipboard.writeText(weight)
@@ -459,6 +481,7 @@
       input.addEventListener('input', calculateWeight);
     });
 
+//Vymaže hodnoty a odstraní zelené orámování (.valid)//
     function resetInputs() {
       const formId = selectedType === 'rod' ? 'rod-form'
                     : selectedType === 'tube' ? 'tube-form'
@@ -487,6 +510,8 @@
     });
   }
 
+
+//Označuje vstupy jako validní nebo chybné podle vyplnění//
     function validateInputs() {
     const visibleForm = ['rod-form', 'tube-form', 'sheet-form'].find(id => {
       return document.getElementById(id) && document.getElementById(id).style.display === 'block';
@@ -509,7 +534,7 @@
     input.addEventListener('blur', validateInputs);
   });
 
-  // Předvybarvení všech inputů jako chybné na začátku
+  // Předvybarvení všech inputů jako chybné na začátku//
   window.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('input').forEach(input => {
       input.classList.remove('valid');
