@@ -73,7 +73,6 @@
       margin-bottom: 20px;
       flex-wrap: wrap;
     }
-
     .tile {
       background-color: #eef3fb;
       border: 2px solid #164183;
@@ -85,11 +84,9 @@
       transition: background-color 0.3s, border-color 0.3s;
       min-width: 120px;
     }
-
     .tile:hover {
       background-color: #dbe6f7;
     }
-
     .tile.active {
       background-color: #508cbc;
       border-color: #90181c;
@@ -227,10 +224,11 @@
       <p>Vyberte typ polotovaru, pro který chcete vypočítat hmotnost:</p>
     </div>
 
-    <div class="tile-selection">
+     <div class="tile-selection">
       <div class="tile" id="tile-rod" onclick="selectType('rod')">Tyč</div>
       <div class="tile" id="tile-tube" onclick="selectType('tube')">Trubka</div>
       <div class="tile" id="tile-sheet" onclick="selectType('sheet')">Plech</div>
+      <div class="tile" id="tile-i" onclick="selectType('i')">I profil</div>
     </div>
 
     <div class="form-section" id="material-selection" style="display:none;">
@@ -300,6 +298,34 @@
       </div>
     </div>
 
+    <div class="form-section" id="i-form" style="display: none;">
+      <label>Typ profilu:</label>
+      <label><input type="radio" name="i-type" value="IPN" checked onchange="loadIProfiles()"> IPN</label>
+      <label><input type="radio" name="i-type" value="IPE" onchange="loadIProfiles()"> IPE</label>
+
+      <label for="i-select">Vyberte profil:</label>
+      <select id="i-select" onchange="calculateWeight()">
+        <option>Načítání...</option>
+      </select>
+
+      <label for="i-length">Délka profilu (mm):</label>
+      <input type="number" id="i-length" placeholder="Délka v mm" />
+
+      <div class="image-container">
+        <img src="images/ipn_profile_image.jpg" alt="Obrázek I profilu" />
+      </div>
+    </div>
+
+    <div class="result" id="result">
+      Hmotnost: <span id="weight">0</span> kg
+      <span class="copy-icon" onclick="copyWeight()" title="Zkopírovat">📋</span>
+    </div>
+
+    <button class="reset-button" id="reset-button" onclick="resetInputs()">Vymazat hodnoty</button>
+    <button class="toggle-alternatives" onclick="toggleAlternatives()">Zobrazit hmotnosti pro jiné materiály</button>
+    <div id="alternative-weights" class="alternative-weights"></div>
+  </div>
+
    <div class="result" id="result">
       Hmotnost: <span id="weight">0</span> kg
       <span class="copy-icon" onclick="copyWeight()" title="Zkopírovat">📋</span>
@@ -329,6 +355,7 @@
         rod: document.getElementById('tile-rod'),
         tube: document.getElementById('tile-tube'),
         sheet: document.getElementById('tile-sheet')
+        i: document.getElementById('tile-i')
       };
 
       if (selectedType === type) {
@@ -351,7 +378,12 @@
       document.getElementById('rod-form').style.display = type === 'rod' ? 'block' : 'none';
       document.getElementById('tube-form').style.display = type === 'tube' ? 'block' : 'none';
       document.getElementById('sheet-form').style.display = type === 'sheet' ? 'block' : 'none';
+      document.getElementById('i-form').style.display = 'none';
 
+      if (type === 'i') {
+        document.getElementById('i-form').style.display = 'block';
+        loadIProfiles();
+      } else {
       calculateWeight();
     }
 
@@ -516,6 +548,35 @@
       input.classList.remove('valid');
     });
   });
+
+    function loadIProfiles() {
+      const type = document.querySelector('input[name="i-type"]:checked').value;
+      const url = type === 'IPN' ? 'datasheets/ipn_datasheet.csv' : 'datasheets/ipe_datasheet.csv';
+
+      fetch(url)
+        .then(res => res.text())
+        .then(text => {
+          const rows = text.trim().split('\n').slice(1);
+          iProfiles = rows.map(row => {
+            const [oznaceni, h, b, s, t, A] = row.split(';');
+            return { oznaceni, A: parseFloat(A.replace(',', '.')) };
+          });
+
+          const select = document.getElementById('i-select');
+          select.innerHTML = iProfiles.map(p => `<option value="${p.A}">${p.oznaceni}</option>`).join('');
+          calculateWeight();
+        });
+    }
+
+    function getVolume() {
+      if (selectedType === 'i') {
+        const A = parseFloat(document.getElementById('i-select').value) * 1e-4; // cm2 to m2
+        const l = parseFloat(document.getElementById('i-length').value) / 1000; // mm to m
+        if (isNaN(A) || isNaN(l)) return 0;
+        return A * l;
+      }
+      return 0; // ostatní typy řeší jinde
+    }
 
   </script>
 </body>
