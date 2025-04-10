@@ -325,6 +325,12 @@
       1200: "Plast"
     };
 
+    const inputs = document.querySelectorAll('input, select');
+    inputs.forEach(input => input.addEventListener('input', () => {
+      calculateWeight();
+      validateInputs();
+    }));
+
     function mmToMeters(mm) {
       return mm / 1000;
     }
@@ -372,11 +378,11 @@
     }
 
     function toggleTubeInputs() {
-    const type = document.getElementById('tube-input-type').value;
-    document.getElementById('tube-outer-thickness').style.display = type === 'outer-thickness' ? 'block' : 'none';
-    document.getElementById('tube-outer-inner').style.display = type === 'outer-inner' ? 'block' : 'none';
-    calculateWeight();
-  }
+      const type = document.getElementById('tube-input-type').value;
+      document.getElementById('tube-outer-thickness').style.display = type === 'outer-thickness' ? 'block' : 'none';
+      document.getElementById('tube-outer-inner').style.display = type === 'outer-inner' ? 'block' : 'none';
+      calculateWeight();
+    }
 
     function getVolume() {
     if (document.getElementById('rod-form').style.display === 'block') {
@@ -479,36 +485,28 @@
       calculateWeight();
     }
 
-    // Přidání odebrání .valid i při mazání tlačítkem "Vymazat hodnoty"
     function resetInputs() {
-      const formId = ['rod-form', 'tube-form', 'sheet-form'].find(id => {
-      return document.getElementById(id) && document.getElementById(id).style.display === 'block';
-    });
-      if (!formId) return;
+      const visibleForm = ['rod-form', 'tube-form', 'sheet-form'].find(id => document.getElementById(id).style.display === 'block');
+      if (!visibleForm) return;
+      document.querySelectorAll(`#${visibleForm} input`).forEach(input => {
+        input.value = '';
+        input.classList.remove('valid');
+      });
+      document.getElementById('custom-density').value = '';
+      calculateWeight();
+    }
 
-      const inputs = document.querySelectorAll(`#${formId} input`);
-      inputs.forEach(input => {
-      input.value = '';
-      input.classList.remove('valid');
+    window.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('input').forEach(input => input.classList.remove('valid'));
     });
-  }
 
     function validateInputs() {
-    const visibleForm = ['rod-form', 'tube-form', 'sheet-form'].find(id => {
-      return document.getElementById(id) && document.getElementById(id).style.display === 'block';
-    });
-
-    if (!visibleForm) return;
-
-    const inputs = document.querySelectorAll(`#${visibleForm} input`);
-    inputs.forEach(input => {
-      if (input.value.trim() === '' || isNaN(parseFloat(input.value))) {
-        input.classList.remove('valid');
-      } else {
-        input.classList.add('valid');
-      }
-    });
-  }
+      const visibleForm = ['rod-form', 'tube-form', 'sheet-form'].find(id => document.getElementById(id).style.display === 'block');
+      if (!visibleForm) return;
+      document.querySelectorAll(`#${visibleForm} input`).forEach(input => {
+        input.classList.toggle('valid', input.value.trim() !== '' && !isNaN(parseFloat(input.value)));
+      });
+    }
 
     document.querySelectorAll('input').forEach(input => {
     input.addEventListener('input', validateInputs);
