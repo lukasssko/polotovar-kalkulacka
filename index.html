@@ -17,7 +17,6 @@
       background-color: #ffe5e5;
       transition: all 0.2s ease;
     }
-
     input.valid {
       border-color: green;
       background-color: #e5ffe5;
@@ -106,8 +105,7 @@
       color: #164183;
     }
 
-    input[type="number"],
-    select {
+    input[type="number"], select {
       padding: 8px;
       width: 100%;
       box-sizing: border-box;
@@ -159,10 +157,8 @@
       display: none;
     }
 
-   .toggle-alternatives {
-      background-color: #164183;
+   .toggle-alternatives, .reset-button {
       border: none;
-      color: white;
       padding: 10px 15px;
       border-radius: 6px;
       cursor: pointer;
@@ -171,9 +167,19 @@
       display: none;
       transition: background-color 0.3s;
     }
-
+    .toggle-alternatives {
+      background-color: #164183;
+      color: white;
+    }
     .toggle-alternatives:hover {
       background-color: #0f2e5c;
+    }
+    .reset-button {
+      background-color: #90181c;
+      color: white;
+    }
+    .reset-button:hover {
+      background-color: #c4341e;
     }
 
     .alternative-weights {
