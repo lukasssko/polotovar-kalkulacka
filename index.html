@@ -475,28 +475,31 @@
     }
 
     function resetInputs() {
-      const formId = ['rod-form', 'tube-form', 'sheet-form'].find(id => {
-        return document.getElementById(id) && document.getElementById(id).style.display === 'block';
-      });
-      if (!formId) return;
+  const formId = ['rod-form', 'tube-form', 'sheet-form'].find(id => {
+    return document.getElementById(id) && document.getElementById(id).style.display === 'block';
+  });
+  if (!formId) return;
 
-      const inputs = document.querySelectorAll(`#${formId} input`);
-      inputs.forEach(input => {
-        input.value = '';
-        input.classList.remove('valid');
-      });
+  const inputs = document.querySelectorAll(`#${formId} input`);
+  inputs.forEach(input => {
+    input.value = '';
+    input.classList.remove('valid');
+  });
 
-      document.getElementById('custom-density').value = '';
+  document.getElementById('custom-density').value = '';
 
-      const altDiv = document.getElementById('alternative-weights');
-      altDiv.style.display = 'none';
-      altDiv.innerHTML = '';
+  // Znovu zobrazit alternativní hmotnosti (pokud byly otevřené)
+  const altDiv = document.getElementById('alternative-weights');
+  if (altDiv.style.display === 'block') {
+    altDiv.innerHTML = '';
+  } else {
+    altDiv.style.display = 'block';
+  }
 
-      document.getElementById('weight').textContent = '0,00';
+  document.getElementById('weight').textContent = '0,00';
 
-      calculateWeight();
-    }
-
+  calculateWeight();
+}
     function validateInputs() {
     const visibleForm = ['rod-form', 'tube-form', 'sheet-form'].find(id => {
       return document.getElementById(id) && document.getElementById(id).style.display === 'block';
