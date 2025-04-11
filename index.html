@@ -305,20 +305,27 @@
     <option value="equal">Rovnoramenný</option>
     <option value="unequal">Nerovnoramenný</option>
   </select>
+
+  <div id="l-subtype-container" style="display: none;">
+    <label for="l-subtype">Označení:</label>
+    <select id="l-subtype">
+      <option value="">-- načítám možnosti --</option>
+    </select>
+  </div>
+
+  <div class="form-values" id="l-dimensions" style="display: none;">
+    <label for="l-a">Rameno a (mm):</label>
+    <input type="number" id="l-a" readonly />
+    <label for="l-b">Rameno b (mm):</label>
+    <input type="number" id="l-b" readonly />
+    <label for="l-t">Tloušťka t (mm):</label>
+    <input type="number" id="l-t" readonly />
+  </div>
+
   <div class="image-container" id="l-image-container" style="display:none;">
     <img id="l-image" src="" alt="Obrázek L profilu" />
   </div>
 </div>
-
-      <div class="result" id="result">
-        Hmotnost: <span id="weight">0</span> kg
-        <span class="copy-icon" onclick="copyWeight()" title="Zkopírovat">📋</span>
-      </div>
-
-      <button class="reset-button" id="reset-button" onclick="resetInputs()">Vymazat hodnoty</button>
-      <button class="toggle-alternatives" onclick="toggleAlternatives()">Zobrazit hmotnosti pro jiné materiály</button>
-      <div id="alternative-weights" class="alternative-weights"></div>
-    </div>
   </div>
 
   <script>
@@ -582,6 +589,76 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });;
 
+document.getElementById('l-type').addEventListener('change', () => {
+  const select = document.getElementById('l-type');
+  const type = select.value;
+  const image = document.getElementById('l-image');
+  const container = document.getElementById('l-image-container');
+  const subtypeContainer = document.getElementById('l-subtype-container');
+  const dimensions = document.getElementById('l-dimensions');
+  const subtypeSelect = document.getElementById('l-subtype');
+
+  if (type === 'equal') {
+    image.src = 'images/l_isosceles_profile_image.jpg';
+    container.style.display = 'block';
+    subtypeContainer.style.display = 'block';
+    dimensions.style.display = 'none';
+    select.classList.remove('invalid');
+    select.classList.add('valid');
+
+    // Načti CSV soubor
+    fetch('datasheets/l_isosceles_datasheet.csv')
+      .then(response => response.text())
+      .then(data => {
+        const lines = data.trim().split('
+');
+        const header = lines[0].split(';');
+        subtypeSelect.innerHTML = '<option value="">-- vyberte profil --</option>';
+        for (let i = 1; i < lines.length; i++) {
+          const [oznaceni, a, b, t] = lines[i].split(';');
+          const option = document.createElement('option');
+          option.value = oznaceni;
+          option.textContent = oznaceni;
+          option.setAttribute('data-a', a);
+          option.setAttribute('data-b', b);
+          option.setAttribute('data-t', t);
+          subtypeSelect.appendChild(option);
+        }
+      });
+
+  } else if (type === 'unequal') {
+    image.src = 'images/l_nonisosceles_profile_image.jpg';
+    container.style.display = 'block';
+    subtypeContainer.style.display = 'none';
+    dimensions.style.display = 'none';
+    select.classList.remove('invalid');
+    select.classList.add('valid');
+  } else {
+    container.style.display = 'none';
+    image.src = '';
+    subtypeContainer.style.display = 'none';
+    dimensions.style.display = 'none';
+    select.classList.remove('valid');
+    select.classList.add('invalid');
+  }
+});
+
+document.getElementById('l-subtype').addEventListener('change', () => {
+  const select = document.getElementById('l-subtype');
+  const selectedOption = select.options[select.selectedIndex];
+  const a = selectedOption.getAttribute('data-a');
+  const b = selectedOption.getAttribute('data-b');
+  const t = selectedOption.getAttribute('data-t');
+  if (a && b && t) {
+    document.getElementById('l-a').value = a;
+    document.getElementById('l-b').value = b;
+    document.getElementById('l-t').value = t;
+    document.getElementById('l-dimensions').style.display = 'block';
+  } else {
+    document.getElementById('l-dimensions').style.display = 'none';
+  }
+});
+    
   </script>
 </body>
 </html>
