@@ -200,6 +200,15 @@
     .reset-button:hover {
       background-color: #c4341e;
     }
+    select.invalid {
+    border: 2px solid red;
+    background-color: #ffe5e5;
+  }
+
+  select.valid {
+    border: 2px solid green;
+    background-color: #e5ffe5;
+  }
   </style>
 </head>
 <body>
@@ -291,7 +300,7 @@
 
       <div class="form-section" id="l-form" style="display: none;">
   <label for="l-type">Typ L profilu:</label>
-  <select id="l-type">
+  <select id="l-type" class="invalid">
     <option value="">-- vyberte typ --</option>
     <option value="equal">Rovnoramenný</option>
     <option value="unequal">Nerovnoramenný</option>
@@ -551,20 +560,27 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
     document.getElementById('l-type').addEventListener('change', () => {
-  const type = document.getElementById('l-type').value;
+  const select = document.getElementById('l-type');
+  const type = select.value;
   const image = document.getElementById('l-image');
   const container = document.getElementById('l-image-container');
   if (type === 'equal') {
     image.src = 'images/l_isosceles_profile_image.jpg';
     container.style.display = 'block';
+    select.classList.remove('invalid');
+    select.classList.add('valid');
   } else if (type === 'unequal') {
     image.src = 'images/l_nonisosceles_profile_image.jpg';
     container.style.display = 'block';
+    select.classList.remove('invalid');
+    select.classList.add('valid');
   } else {
     container.style.display = 'none';
     image.src = '';
+    select.classList.remove('valid');
+    select.classList.add('invalid');
   }
-});
+});;
 
   </script>
 </body>
