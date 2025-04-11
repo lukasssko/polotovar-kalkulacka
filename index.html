@@ -366,25 +366,18 @@
 
 
     function hideAllForms() {
-      const allForms = ['rod-form', 'tube-form', 'sheet-form', 'l-form'];
-      allForms.forEach(id => {
-        document.getElementById(id)?.style.display = 'none';
-      });
+  const allForms = ['rod-form', 'tube-form', 'sheet-form', 'l-form'];
+  allForms.forEach(id => {
+    document.getElementById(id).style.display = 'none';
+  });
 
-      document.getElementById('material-selection')?.style.display = 'none';
-      document.getElementById('custom-density-container')?.style.display = 'none';
-      document.getElementById('result')?.style.display = 'none';
-      document.querySelector('.toggle-alternatives')?.style.display = 'none';
-      document.getElementById('reset-button')?.style.display = 'none';
-      document.getElementById('alternative-weights')?.style.display = 'none';
-      document.getElementById('calculator-wrapper')?.style.setProperty('display', 'none');
-
-      const allTiles = ['rod', 'tube', 'sheet', 'l', 'u', 'i', 'h'];
-      allTiles.forEach(id => {
-        const el = document.getElementById(`tile-${id}`);
-        if (el) el.classList.remove('active');
-      });
-    }
+  document.getElementById('material-selection').style.display = 'none';
+  document.getElementById('custom-density-container').style.display = 'none'; // ← TADY JE DŮLEŽITÝ ŘÁDEK
+  document.getElementById('result').style.display = 'none';
+  document.querySelector('.toggle-alternatives').style.display = 'none';
+  document.getElementById('reset-button').style.display = 'none';
+  document.getElementById('alternative-weights').style.display = 'none';
+}
 
 
 
@@ -550,7 +543,7 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-window.selectType = selectType;
+
   </script>
 </body>
 </html>
