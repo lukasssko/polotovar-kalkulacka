@@ -290,12 +290,16 @@
       </div>
 
       <div class="form-section" id="l-form" style="display: none;">
-        <label for="l-type">Typ L profilu:</label>
-        <select id="l-type">
-          <option value="equal">Rovnoramenný</option>
-          <option value="unequal">Nerovnoramenný</option>
-        </select>
-      </div>
+  <label for="l-type">Typ L profilu:</label>
+  <select id="l-type">
+    <option value="">-- vyberte typ --</option>
+    <option value="equal">Rovnoramenný</option>
+    <option value="unequal">Nerovnoramenný</option>
+  </select>
+  <div class="image-container" id="l-image-container" style="display:none;">
+    <img id="l-image" src="" alt="Obrázek L profilu" />
+  </div>
+</div>
 
       <div class="result" id="result">
         Hmotnost: <span id="weight">0</span> kg
@@ -546,6 +550,21 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+    document.getElementById('l-type').addEventListener('change', () => {
+  const type = document.getElementById('l-type').value;
+  const image = document.getElementById('l-image');
+  const container = document.getElementById('l-image-container');
+  if (type === 'equal') {
+    image.src = 'polotovar-kalkulacka/images/l_isosceles_profile_image.jpg';
+    container.style.display = 'block';
+  } else if (type === 'unequal') {
+    image.src = 'polotovar-kalkulacka/images/l_nonisosceles_profile_image.jpg';
+    container.style.display = 'block';
+  } else {
+    container.style.display = 'none';
+    image.src = '';
+  }
+});
 
   </script>
 </body>
