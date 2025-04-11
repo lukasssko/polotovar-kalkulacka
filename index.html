@@ -221,7 +221,7 @@
       <div class="tile" id="tile-h" onclick="selectType('h')">H profil</div>
     </div>
 
-    <div class="calculator-wrapper" id="calculator-wrapper">
+    <div class="calculator-wrapper" id="calculator-wrapper" style="display: none;">
       <div class="form-section" id="material-selection" style="display:none;">
         <label for="material">Materiál:</label>
         <select id="material">
@@ -330,13 +330,16 @@
 
   // Pokud kliknu na již aktivní typ, jen deaktivuj a skonči
   if (selectedType === type) {
-    selectedType = null;
-    allTypes.forEach(id => {
-      const el = document.getElementById(`tile-${id}`);
-      if (el) el.classList.remove('active');
-    });
-    return;
-  }
+  selectedType = null;
+  allTypes.forEach(id => {
+    const el = document.getElementById(`tile-${id}`);
+    if (el) el.classList.remove('active');
+  });
+  document.getElementById('calculator-wrapper').style.display = 'none';
+  return;
+}
+
+
 
   selectedType = type;
 
